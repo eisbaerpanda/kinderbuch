@@ -185,6 +185,43 @@
       color: #333;
       z-index: 5;
     }
+
+    @media screen and (max-width: 768px) {
+      .book-wrapper {
+        width: 95vw;
+        height: auto;
+        aspect-ratio: 1302 / 920;
+      }
+
+      #fullscreen-container {
+        width: 95vw;
+        height: auto;
+        aspect-ratio: 1302 / 920;
+      }
+
+      .nav-button {
+        font-size: 1.5rem;
+        padding: 0.5rem;
+      }
+
+      .button-bar {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .button-bar button, .button-bar input, .download-btn {
+        width: 100%;
+        font-size: 1rem;
+        padding: 0.75rem 1rem;
+      }
+
+      #exitFullscreenBtn {
+        top: 5px;
+        right: 5px;
+        font-size: 0.9rem;
+        padding: 0.4rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -261,7 +298,6 @@
       if (num < 1) num = 1;
       if (num > totalPages) num = totalPages;
       currentPage = num;
-      pageInput.value = num;
       updatePage();
     }
 
@@ -273,11 +309,8 @@
     );
 
     pageInput.addEventListener("input", () => {
-      let val = parseInt(pageInput.value);
+      const val = parseInt(pageInput.value);
       if (!isNaN(val)) {
-        if (val > totalPages) val = totalPages;
-        if (val < 1) val = 1;
-        pageInput.value = val;
         goToPage(val);
       }
     });
