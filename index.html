@@ -33,10 +33,26 @@
       touch-action: pan-y;
     }
 
-    #book {
+    .page {
       position: relative;
       width: 100%;
       height: 100%;
+    }
+
+    .page img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: opacity 0.4s ease-in-out;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .page img.active {
+      opacity: 1;
+      pointer-events: auto;
     }
 
     .nav-button {
@@ -183,7 +199,12 @@
 </head>
 <body>
   <div class="book-wrapper" id="bookWrapper">
-    <div id="book"></div>
+    <div class="page">
+      <img id="imgA" class="active" src="ProjektC/images/1.png" alt="Seite 1">
+      <img id="imgB" src="" alt="">
+    </div>
+    <button class="nav-button" id="prevBtn">❮</button>
+    <button class="nav-button" id="nextBtn">❯</button>
   </div>
 
   <button class="button-bar-toggle" onclick="toggleButtonBar()"></button>
@@ -200,7 +221,12 @@
   <div id="overlay">
     <div id="fullscreen-container">
       <button id="exitFullscreenBtn">✕</button>
-      <div id="bookFS"></div>
+      <div class="page">
+        <img id="imgAFS" class="active" src="ProjektC/images/1.png" alt="Seite 1">
+        <img id="imgBFS" src="" alt="">
+      </div>
+      <button class="nav-button" id="prevBtnFS">❮</button>
+      <button class="nav-button" id="nextBtnFS">❯</button>
     </div>
   </div>
 
