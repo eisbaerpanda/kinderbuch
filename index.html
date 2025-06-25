@@ -75,7 +75,7 @@
       margin-bottom: 2rem;
     }
 
-    .button-bar button, .button-bar input {
+    .button-bar button, .button-bar input, .download-btn {
       background-color: rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(8px);
       border: none;
@@ -85,9 +85,10 @@
       color: #333;
       cursor: pointer;
       transition: all 0.3s ease;
+      text-decoration: none;
     }
 
-    .button-bar button:hover {
+    .button-bar button:hover, .download-btn:hover {
       background-color: rgba(255, 255, 255, 0.4);
       transform: scale(1.05);
     }
@@ -200,6 +201,7 @@
     <span>/ 17</span>
     <button id="fullscreenBtn">⛶ Vollbild</button>
     <button id="backBtn">⇦ Zurück zum Anfang</button>
+    <a href="Das kleine Chamäleon findet seinen Platz.pdf" download class="download-btn">📄 PDF herunterladen</a>
   </div>
 
   <div id="overlay">
