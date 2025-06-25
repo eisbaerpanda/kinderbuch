@@ -232,17 +232,24 @@
 
     function goToPage(page) {
       page = Math.max(1, Math.min(page, totalPages));
+      if (page === currentPage) return;
       currentPage = page;
       const newSrc = `ProjektC/images/${currentPage}.png`;
+
       bookImage.style.opacity = 0;
       bookImageFS.style.opacity = 0;
-      setTimeout(() => {
+
+      const tempImg = new Image();
+      tempImg.src = newSrc;
+      tempImg.onload = () => {
         bookImage.src = newSrc;
         bookImageFS.src = newSrc;
         document.getElementById("pageInput").value = currentPage;
-        bookImage.style.opacity = 1;
-        bookImageFS.style.opacity = 1;
-      }, 200);
+        setTimeout(() => {
+          bookImage.style.opacity = 1;
+          bookImageFS.style.opacity = 1;
+        }, 50);
+      };
     }
 
     document.getElementById("prevBtn").addEventListener("click", () => goToPage(currentPage - 1));
