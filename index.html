@@ -22,7 +22,7 @@
       width: 1302px;
       height: 920px;
       background-color: #ffffff;
-      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.35); /* verstärkter Schatten */
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.35);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -76,7 +76,7 @@
     }
 
     .button-bar button, .button-bar input, .download-btn {
-      background-color: rgba(255, 255, 255, 0.6); /* heller Hintergrund */
+      background-color: rgba(255, 255, 255, 0.6);
       backdrop-filter: blur(8px);
       border: none;
       border-radius: 8px;
@@ -86,7 +86,7 @@
       cursor: pointer;
       transition: all 0.3s ease;
       text-decoration: none;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* leichter Schatten für Tiefe */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     }
 
     .button-bar button:hover, .download-btn:hover {
@@ -116,7 +116,7 @@
       width: calc(1302px * 1.4);
       height: calc(920px * 1.4);
       background-color: #ffffff;
-      box-shadow: 0 0 60px rgba(0, 0, 0, 0.4); /* verstärkter Schatten */
+      box-shadow: 0 0 60px rgba(0, 0, 0, 0.4);
       position: relative;
       display: flex;
       align-items: center;
@@ -183,6 +183,44 @@
       font-weight: bold;
       color: #333;
       z-index: 5;
+    }
+
+    @media screen and (max-width: 768px) {
+      .book-wrapper {
+        width: 90vw;
+        height: auto;
+        aspect-ratio: 1302 / 920;
+      }
+
+      #fullscreen-container {
+        width: 95vw;
+        height: auto;
+        aspect-ratio: 1302 / 920;
+      }
+
+      .nav-button {
+        font-size: 1.5rem;
+        padding: 0.5rem;
+      }
+
+      .button-bar {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: stretch;
+      }
+
+      .button-bar button, .button-bar input, .download-btn {
+        width: 100%;
+        font-size: 1rem;
+        padding: 0.75rem 1rem;
+      }
+
+      #exitFullscreenBtn {
+        top: 5px;
+        right: 5px;
+        font-size: 0.9rem;
+        padding: 0.4rem;
+      }
     }
   </style>
 </head>
