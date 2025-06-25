@@ -19,8 +19,9 @@
 
     .book-wrapper {
       position: relative;
-      width: 1302px;
-      height: 920px;
+      width: min(1302px, 95vw);
+      height: auto;
+      aspect-ratio: 1302 / 920;
       background-color: #ffffff;
       box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
       display: flex;
@@ -114,8 +115,9 @@
     }
 
     #fullscreen-container {
-      width: calc(1302px * 1.4);
-      height: calc(920px * 1.4);
+      width: min(calc(1302px * 1.4), 95vw);
+      height: auto;
+      aspect-ratio: 1302 / 920;
       background-color: #ffffff;
       box-shadow: 0 0 60px rgba(0, 0, 0, 0.4);
       position: relative;
@@ -227,11 +229,11 @@
 <body>
   <div class="book-wrapper">
     <div id="loading">Lädt...</div>
-    <button class="nav-button" id="prevBtn">&#8249;</button>
+    <button class="nav-button" id="prevBtn">❮</button>
     <div class="page">
       <img id="bookImage" src="ProjektC/images/1.png" alt="Seite 1">
     </div>
-    <button class="nav-button" id="nextBtn">&#8250;</button>
+    <button class="nav-button" id="nextBtn">❯</button>
   </div>
 
   <div class="button-bar">
@@ -249,8 +251,8 @@
       <div class="page">
         <img id="bookImageFS" src="ProjektC/images/1.png" alt="Seite 1">
       </div>
-      <button class="nav-button" id="prevBtnFS">&#8249;</button>
-      <button class="nav-button" id="nextBtnFS">&#8250;</button>
+      <button class="nav-button" id="prevBtnFS">❮</button>
+      <button class="nav-button" id="nextBtnFS">❯</button>
     </div>
   </div>
 
