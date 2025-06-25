@@ -111,8 +111,11 @@
     }
 
     #fullscreen-container {
-      width: 1302px;
-      height: 920px;
+      max-width: 90vw;
+      max-height: 90vh;
+      width: auto;
+      height: auto;
+      aspect-ratio: 1302 / 920;
       background-color: #ffffff;
       box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
       position: relative;
@@ -120,8 +123,6 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      transform: scale(1.25);
-      transform-origin: center;
     }
 
     #fullscreen-container .page {
