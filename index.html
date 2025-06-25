@@ -14,7 +14,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      font-family: sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
     .book-wrapper {
@@ -66,48 +66,35 @@
     #prevBtn, #prevBtnFS { left: 0; }
     #nextBtn, #nextBtnFS { right: 0; }
 
-    #fullscreenBtn {
-      margin-top: 1rem;
-      background-color: #333;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-
-    #fullscreenBtn:hover {
-      background-color: #000;
-    }
-
-    #page-controls {
-      margin-top: 1rem;
+    .button-bar {
       display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
       align-items: center;
-      gap: 0.5rem;
+      gap: 1rem;
+      margin-bottom: 2rem;
     }
 
-    #pageInput {
-      width: 50px;
-      padding: 0.3rem;
-      font-size: 1rem;
-      text-align: center;
-    }
-
-    #backBtn {
-      margin-top: 1rem;
-      background-color: #666;
-      color: white;
+    .button-bar button, .button-bar input {
+      background-color: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
       border: none;
+      border-radius: 8px;
       padding: 0.5rem 1rem;
       font-size: 1rem;
+      color: #333;
       cursor: pointer;
-      border-radius: 4px;
+      transition: all 0.3s ease;
     }
 
-    #backBtn:hover {
-      background-color: #444;
+    .button-bar button:hover {
+      background-color: rgba(255, 255, 255, 0.4);
+      transform: scale(1.05);
+    }
+
+    .button-bar input {
+      width: 60px;
+      text-align: center;
     }
 
     #overlay {
@@ -124,14 +111,15 @@
     }
 
     #fullscreen-container {
-      max-width: 90vw;
-      max-height: 90vh;
+      width: 1302px;
+      height: 920px;
       background-color: #ffffff;
       box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
     }
 
     #fullscreen-container .page {
@@ -140,18 +128,35 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
     }
 
     #fullscreen-container .page img {
-      max-width: 100%;
-      max-height: 100%;
+      width: 100%;
+      height: 100%;
       object-fit: contain;
-      transform: scale(1.5);
       transition: transform 0.3s ease-in-out;
+      transform: scale(1.25);
+    }
+
+    #prevBtnFS, #nextBtnFS, #exitFullscreenBtn {
+      position: absolute;
+      z-index: 10;
+    }
+
+    #prevBtnFS {
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    #nextBtnFS {
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
     }
 
     #exitFullscreenBtn {
-      position: absolute;
       top: 10px;
       right: 10px;
       background-color: rgba(0, 0, 0, 0.6);
@@ -161,7 +166,6 @@
       cursor: pointer;
       font-size: 1rem;
       border-radius: 4px;
-      z-index: 10;
     }
 
     #loading {
@@ -191,14 +195,13 @@
     <button class="nav-button" id="nextBtn">&#8250;</button>
   </div>
 
-  <div id="page-controls">
+  <div class="button-bar">
     <label for="pageInput">Seite:</label>
     <input type="number" id="pageInput" min="1" max="17" value="1">
     <span>/ 17</span>
+    <button id="fullscreenBtn">⛶ Vollbild</button>
+    <button id="backBtn">⇦ Zurück zum Anfang</button>
   </div>
-
-  <button id="fullscreenBtn">⛶ Vollbild</button>
-  <button id="backBtn">⇦ Zurück zum Anfang</button>
 
   <div id="overlay">
     <div id="fullscreen-container">
