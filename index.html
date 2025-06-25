@@ -14,17 +14,19 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      font-family: sans-serif;
     }
 
     #book-container {
       position: relative;
       width: 1302px;
       height: 920px;
-      background-color: white;
+      background-color: #eaeaea;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
     }
 
     #page {
@@ -38,7 +40,7 @@
     #page img {
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      object-fit: fill;
     }
 
     .nav-button {
@@ -66,6 +68,24 @@
     #nextBtn {
       right: 0;
     }
+
+    #page-controls {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    #pageInput {
+      width: 50px;
+      padding: 0.3rem;
+      font-size: 1rem;
+      text-align: center;
+    }
+
+    #pageLabel {
+      font-size: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -78,16 +98,24 @@
     <button class="nav-button" id="nextBtn">&#8250;</button>
   </div>
 
+  <div id="page-controls">
+    <label for="pageInput" id="pageLabel">Seite:</label>
+    <input type="number" id="pageInput" min="1" max="25" value="1">
+    <span>/ 25</span>
+  </div>
+
   <script>
-    const totalPages = 17;
+    const totalPages = 25;
     let currentPage = 1;
     const bookImage = document.getElementById("bookImage");
     const prevBtn = document.getElementById("prevBtn");
     const nextBtn = document.getElementById("nextBtn");
+    const pageInput = document.getElementById("pageInput");
 
     function updatePage() {
       bookImage.src = `images/${currentPage}.png`;
       bookImage.alt = `Seite ${currentPage}`;
+      pageInput.value = currentPage;
     }
 
     prevBtn.addEventListener("click", () => {
@@ -100,6 +128,14 @@
     nextBtn.addEventListener("click", () => {
       if (currentPage < totalPages) {
         currentPage++;
+        updatePage();
+      }
+    });
+
+    pageInput.addEventListener("change", () => {
+      const val = parseInt(pageInput.value);
+      if (val >= 1 && val <= totalPages) {
+        currentPage = val;
         updatePage();
       }
     });
