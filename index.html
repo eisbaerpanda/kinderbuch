@@ -6,30 +6,35 @@
   <title>Das kleine Chamäleon</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.css" />
   <style>
-    body {
-      background-color: #f4f4f4;
-      font-family: sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    html, body {
       margin: 0;
-      padding: 2rem;
-    }
-    h1 {
-      margin-bottom: 1rem;
-    }
-    #flipbook {
-      width: 1414px;
-      height: 500px;
-    }
-    .page {
-      width: 707px;
-      height: 500px;
+      padding: 0;
+      height: 100%;
+      background-color: #f4f4f4;
       display: flex;
       justify-content: center;
       align-items: center;
+    }
+
+    #flipbook {
+      width: 75vw;
+      max-width: 1400px;
+      height: calc(75vw * 0.707);
+      max-height: 100vh;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
       background-color: white;
     }
+
+    .page {
+      width: 50%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background-color: white;
+    }
+
     .page img {
       max-width: 100%;
       max-height: 100%;
@@ -38,7 +43,6 @@
   </style>
 </head>
 <body>
-  <h1>Das kleine Chamäleon findet seinen Platz</h1>
 
   <div id="flipbook">
     <div class="page"><img src="images/1.png" alt="Seite 1"></div>
@@ -60,13 +64,11 @@
     <div class="page"><img src="images/17.png" alt="Seite 17"></div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
   <script>
-    $(document).ready(function() {
+    $(function() {
       $('#flipbook').turn({
-        width: 1414,
-        height: 500,
         autoCenter: true
       });
     });
