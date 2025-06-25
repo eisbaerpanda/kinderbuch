@@ -22,7 +22,7 @@
       width: 1414px;
       height: 500px;
     }
-    #flipbook .page {
+    .page {
       width: 707px;
       height: 500px;
       display: flex;
@@ -39,6 +39,7 @@
 </head>
 <body>
   <h1>Das kleine Chamäleon findet seinen Platz</h1>
+
   <div id="flipbook">
     <div class="page"><img src="images/1.png" alt="Seite 1"></div>
     <div class="page"><img src="images/2.png" alt="Seite 2"></div>
@@ -63,7 +64,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
   <script>
-    $(function() {
+    $(document).ready(function() {
       $('#flipbook').turn({
         width: 1414,
         height: 500,
