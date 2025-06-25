@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Das kleine Chamäleon</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.css" />
   <style>
     html, body {
       margin: 0;
@@ -12,65 +11,95 @@
       height: 100%;
       background-color: #f4f4f4;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
     }
 
-    #flipbook {
+    #book-container {
+      position: relative;
       width: 75vw;
       max-width: 1400px;
+    }
+
+    #page {
+      width: 100%;
       height: calc(75vw * 0.707);
-      max-height: 100vh;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      max-height: 90vh;
       background-color: white;
-    }
-
-    .page {
-      width: 50%;
-      height: 100%;
       display: flex;
-      justify-content: center;
       align-items: center;
-      overflow: hidden;
-      background-color: white;
+      justify-content: center;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     }
 
-    .page img {
+    #page img {
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
+    }
+
+    .nav-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      padding: 1rem;
+      cursor: pointer;
+      font-size: 2rem;
+      z-index: 10;
+      transition: background-color 0.3s;
+    }
+
+    .nav-button:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    #prevBtn {
+      left: 0;
+    }
+
+    #nextBtn {
+      right: 0;
     }
   </style>
 </head>
 <body>
 
-  <div id="flipbook">
-    <div class="page"><img src="images/1.png" alt="Seite 1"></div>
-    <div class="page"><img src="images/2.png" alt="Seite 2"></div>
-    <div class="page"><img src="images/3.png" alt="Seite 3"></div>
-    <div class="page"><img src="images/4.png" alt="Seite 4"></div>
-    <div class="page"><img src="images/5.png" alt="Seite 5"></div>
-    <div class="page"><img src="images/6.png" alt="Seite 6"></div>
-    <div class="page"><img src="images/7.png" alt="Seite 7"></div>
-    <div class="page"><img src="images/8.png" alt="Seite 8"></div>
-    <div class="page"><img src="images/9.png" alt="Seite 9"></div>
-    <div class="page"><img src="images/10.png" alt="Seite 10"></div>
-    <div class="page"><img src="images/11.png" alt="Seite 11"></div>
-    <div class="page"><img src="images/12.png" alt="Seite 12"></div>
-    <div class="page"><img src="images/13.png" alt="Seite 13"></div>
-    <div class="page"><img src="images/14.png" alt="Seite 14"></div>
-    <div class="page"><img src="images/15.png" alt="Seite 15"></div>
-    <div class="page"><img src="images/16.png" alt="Seite 16"></div>
-    <div class="page"><img src="images/17.png" alt="Seite 17"></div>
+  <div id="book-container">
+    <button class="nav-button" id="prevBtn">&#8249;</button>
+    <div id="page">
+      <img id="bookImage" src="images/1.png" alt="Seite 1">
+    </div>
+    <button class="nav-button" id="nextBtn">&#8250;</button>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
   <script>
-    $(function() {
-      $('#flipbook').turn({
-        autoCenter: true
-      });
+    const totalPages = 25;
+    let currentPage = 1;
+    const bookImage = document.getElementById("bookImage");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    function updatePage() {
+      bookImage.src = `images/${currentPage}.png`;
+      bookImage.alt = `Seite ${currentPage}`;
+    }
+
+    prevBtn.addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        updatePage();
+      }
+    });
+
+    nextBtn.addEventListener("click", () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        updatePage();
+      }
     });
   </script>
 </body>
