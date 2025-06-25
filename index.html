@@ -46,12 +46,17 @@
       height: 100%;
       object-fit: contain;
       transition: transform 0.6s ease, opacity 0.6s ease;
-      transform-origin: left center;
+      transform-origin: center;
       transform: rotateY(0deg);
     }
 
-    .page.turning img {
-      transform: rotateY(-10deg);
+    .page.turning-left img {
+      transform: rotateY(-25deg);
+      opacity: 0.8;
+    }
+
+    .page.turning-right img {
+      transform: rotateY(25deg);
       opacity: 0.8;
     }
 
@@ -91,7 +96,7 @@
     }
 
     .button-bar-toggle::before {
-      content: "\2630"; /* Hamburger Menu */
+      content: "\2630";
     }
 
     .button-bar {
@@ -268,15 +273,21 @@
 
     function goToPage(page) {
       page = Math.max(1, Math.min(page, totalPages));
+      const direction = page > currentPage ? 'right' : 'left';
       currentPage = page;
-      document.querySelectorAll(".page").forEach(p => p.classList.add("turning"));
+
+      document.querySelectorAll(".page").forEach(p => {
+        p.classList.remove("turning-left", "turning-right");
+        p.classList.add(direction === 'right' ? "turning-right" : "turning-left");
+      });
+
       setTimeout(() => {
         const newSrc = `ProjektC/images/${currentPage}.png`;
         bookImage.src = newSrc;
         bookImageFS.src = newSrc;
         document.getElementById("pageInput").value = currentPage;
-        document.querySelectorAll(".page").forEach(p => p.classList.remove("turning"));
-      }, 150);
+        document.querySelectorAll(".page").forEach(p => p.classList.remove("turning-left", "turning-right"));
+      }, 300);
     }
 
     document.getElementById("prevBtn").addEventListener("click", () => goToPage(currentPage - 1));
