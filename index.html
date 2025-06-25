@@ -189,12 +189,7 @@
     }
 
     @media screen and (max-width: 768px) {
-      .book-wrapper {
-        width: 95vw;
-        height: auto;
-        aspect-ratio: 1302 / 920;
-      }
-
+      .book-wrapper,
       #fullscreen-container {
         width: 95vw;
         height: auto;
@@ -317,9 +312,17 @@
       }
     });
 
-    fullscreenBtn.addEventListener("click", () => overlay.style.display = "flex");
-    exitFullscreenBtn.addEventListener("click", () => overlay.style.display = "none");
-    backBtn.addEventListener("click", () => goToPage(1));
+    fullscreenBtn.addEventListener("click", () => {
+      overlay.style.display = "flex";
+    });
+
+    exitFullscreenBtn.addEventListener("click", () => {
+      overlay.style.display = "none";
+    });
+
+    backBtn.addEventListener("click", () => {
+      goToPage(1);
+    });
 
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && overlay.style.display === "flex") {
