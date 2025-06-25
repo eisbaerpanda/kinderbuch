@@ -26,7 +26,318 @@
       background-color: #ffffff;
       box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
       display: flex;
+      align-items: center;<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Das kleine Chamäleon</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow: hidden;
+      background: linear-gradient(to bottom right, #fef6e4, #d8e2dc);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       align-items: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    .book-wrapper {
+      position: relative;
+      width: min(1302px, 95vw);
+      height: auto;
+      aspect-ratio: 1302 / 920;
+      background-color: #ffffff;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin: 2rem 0 6rem;
+      touch-action: pan-y;
+    }
+
+    .page {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .page img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 0.4s ease-in-out;
+      pointer-events: none;
+    }
+
+    .page img.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .nav-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      padding: 0.5rem 0.75rem;
+      cursor: pointer;
+      font-size: 1.2rem;
+      z-index: 10;
+      border-radius: 4px;
+    }
+
+    .nav-button:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    #prevBtn, #prevBtnFS { left: 0; }
+    #nextBtn, #nextBtnFS { right: 0; }
+
+    .button-bar-toggle {
+      display: none;
+      position: fixed;
+      bottom: 0.5rem;
+      right: 0.5rem;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 0.5rem;
+      font-size: 1.5rem;
+      z-index: 101;
+    }
+
+    .button-bar-toggle::before {
+      content: "\2630";
+    }
+
+    .button-bar {
+      position: fixed;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: max-content;
+      max-width: 95vw;
+      display: none;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      z-index: 100;
+    }
+
+    .button-bar.active {
+      display: flex;
+    }
+
+    .button-bar button, .button-bar input, .download-btn {
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      color: #222;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .button-bar button:hover, .download-btn:hover {
+      background-color: #f4f4f4;
+    }
+
+    .button-bar input {
+      width: 60px;
+      text-align: center;
+    }
+
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    #fullscreen-container {
+      width: min(calc(1302px * 1.4), 95vw);
+      height: auto;
+      aspect-ratio: 1302 / 920;
+      background-color: #ffffff;
+      box-shadow: 0 0 60px rgba(0, 0, 0, 0.4);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    #exitFullscreenBtn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      border: none;
+      padding: 0.5rem;
+      cursor: pointer;
+      font-size: 1rem;
+      border-radius: 4px;
+      z-index: 10;
+    }
+
+    @media screen and (max-width: 768px) {
+      .nav-button {
+        font-size: 1rem;
+        padding: 0.3rem 0.5rem;
+      }
+
+      .button-bar-toggle {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="book-wrapper" id="bookWrapper">
+    <div class="page">
+      <img id="imgA" class="active" src="ProjektC/images/1.png" alt="Seite 1">
+      <img id="imgB" src="" alt="">
+    </div>
+    <button class="nav-button" id="prevBtn">❮</button>
+    <button class="nav-button" id="nextBtn">❯</button>
+  </div>
+
+  <button class="button-bar-toggle" onclick="toggleButtonBar()"></button>
+
+  <div class="button-bar" id="buttonBar">
+    <label for="pageInput">Seite:</label>
+    <input type="number" id="pageInput" min="1" max="17" value="1">
+    <span>/ 17</span>
+    <button id="fullscreenBtn">⛶ Vollbild</button>
+    <button id="backBtn">⇦ Zurück zum Anfang</button>
+    <a href="ProjektC/das-kleine-chamaeleon.pdf" download class="download-btn">📄 PDF herunterladen</a>
+  </div>
+
+  <div id="overlay">
+    <div id="fullscreen-container">
+      <button id="exitFullscreenBtn">✕</button>
+      <div class="page">
+        <img id="imgAFS" class="active" src="ProjektC/images/1.png" alt="Seite 1">
+        <img id="imgBFS" src="" alt="">
+      </div>
+      <button class="nav-button" id="prevBtnFS">❮</button>
+      <button class="nav-button" id="nextBtnFS">❯</button>
+    </div>
+  </div>
+
+  <script>
+    const totalPages = 17;
+    let currentPage = 1;
+
+    function goToPage(page) {
+      page = Math.max(1, Math.min(page, totalPages));
+      if (page === currentPage) return;
+      currentPage = page;
+      const newSrc = `ProjektC/images/${currentPage}.png`;
+
+      const tempImg = new Image();
+      tempImg.src = newSrc;
+      tempImg.onload = () => {
+        const [img1, img2] = [document.getElementById("imgA"), document.getElementById("imgB")];
+        const [img1FS, img2FS] = [document.getElementById("imgAFS"), document.getElementById("imgBFS")];
+
+        let [active, hidden] = img1.classList.contains("active") ? [img1, img2] : [img2, img1];
+        let [activeFS, hiddenFS] = img1FS.classList.contains("active") ? [img1FS, img2FS] : [img2FS, img1FS];
+
+        hidden.src = newSrc;
+        hidden.classList.add("active");
+        active.classList.remove("active");
+
+        hiddenFS.src = newSrc;
+        hiddenFS.classList.add("active");
+        activeFS.classList.remove("active");
+
+        document.getElementById("pageInput").value = currentPage;
+      };
+    }
+
+    document.getElementById("prevBtn").addEventListener("click", () => goToPage(currentPage - 1));
+    document.getElementById("nextBtn").addEventListener("click", () => goToPage(currentPage + 1));
+    document.getElementById("prevBtnFS").addEventListener("click", () => goToPage(currentPage - 1));
+    document.getElementById("nextBtnFS").addEventListener("click", () => goToPage(currentPage + 1));
+
+    document.getElementById("pageInput").addEventListener("input", (e) => {
+      const val = parseInt(e.target.value);
+      if (!isNaN(val)) goToPage(val);
+    });
+
+    document.getElementById("fullscreenBtn").addEventListener("click", () => {
+      document.getElementById("overlay").style.display = "flex";
+    });
+
+    document.getElementById("exitFullscreenBtn").addEventListener("click", () => {
+      document.getElementById("overlay").style.display = "none";
+    });
+
+    document.getElementById("backBtn").addEventListener("click", () => goToPage(1));
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") goToPage(currentPage - 1);
+      if (e.key === "ArrowRight") goToPage(currentPage + 1);
+      if (e.key === "Escape") document.getElementById("overlay").style.display = "none";
+    });
+
+    const wrapper = document.getElementById("bookWrapper");
+    const fullscreenContainer = document.getElementById("fullscreen-container");
+    [wrapper, fullscreenContainer].forEach(container => {
+      let touchStartX = 0;
+      container.addEventListener("touchstart", (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      });
+      container.addEventListener("touchend", (e) => {
+        let touchEndX = e.changedTouches[0].screenX;
+        if (touchEndX < touchStartX - 50) goToPage(currentPage + 1);
+        if (touchEndX > touchStartX + 50) goToPage(currentPage - 1);
+      });
+    });
+
+    function toggleButtonBar() {
+      const bar = document.getElementById('buttonBar');
+      bar.classList.toggle('active');
+    }
+
+    window.onload = () => {
+      const isSmallScreen = window.innerWidth <= 768;
+      const bar = document.getElementById('buttonBar');
+      if (!isSmallScreen) bar.classList.add('active');
+    }
+  </script>
+</body>
+</html>
+
       justify-content: center;
       overflow: hidden;
       margin: 2rem 0 6rem;
