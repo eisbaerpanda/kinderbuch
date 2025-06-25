@@ -73,27 +73,25 @@
       background-color: rgba(0, 0, 0, 0.8);
     }
 
-    #prevBtn { left: 0; }
-    #nextBtn { right: 0; }
+    #prevBtn, #prevBtnFS { left: 0; }
+    #nextBtn, #nextBtnFS { right: 0; }
 
     .button-bar-toggle {
       display: none;
       position: fixed;
-      bottom: 1rem;
-      right: 1rem;
-      background-color: transparent;
+      bottom: 0.5rem;
+      right: 0.5rem;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
       border: none;
-      font-size: 2rem;
-      color: #333;
+      border-radius: 4px;
+      padding: 0.5rem;
+      font-size: 1.5rem;
       z-index: 101;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-      border-radius: 50%;
-      padding: 0.3rem 0.6rem;
-      backdrop-filter: blur(5px);
     }
 
     .button-bar-toggle::before {
-      content: "\2699";
+      content: "\2630"; /* Hamburger Menu */
     }
 
     .button-bar {
@@ -138,6 +136,65 @@
       text-align: center;
     }
 
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    #fullscreen-container {
+      width: min(calc(1302px * 1.4), 95vw);
+      height: auto;
+      aspect-ratio: 1302 / 920;
+      background-color: #ffffff;
+      box-shadow: 0 0 60px rgba(0, 0, 0, 0.4);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    #fullscreen-container .page {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    #fullscreen-container .page img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    #prevBtnFS, #nextBtnFS, #exitFullscreenBtn {
+      position: absolute;
+      z-index: 10;
+    }
+
+    #exitFullscreenBtn {
+      top: 10px;
+      right: 10px;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      border: none;
+      padding: 0.5rem;
+      cursor: pointer;
+      font-size: 1rem;
+      border-radius: 4px;
+    }
+
     @media screen and (max-width: 768px) {
       .button-bar {
         display: none;
@@ -156,6 +213,13 @@
         min-width: 120px;
         font-size: 0.95rem;
         padding: 0.5rem 0.75rem;
+      }
+
+      #exitFullscreenBtn {
+        top: 5px;
+        right: 5px;
+        font-size: 0.9rem;
+        padding: 0.4rem;
       }
     }
   </style>
@@ -180,10 +244,22 @@
     <a href="ProjektC/das-kleine-chamaeleon.pdf" download class="download-btn">📄 PDF herunterladen</a>
   </div>
 
+  <div id="overlay">
+    <div id="fullscreen-container">
+      <button id="exitFullscreenBtn">✕</button>
+      <div class="page">
+        <img id="bookImageFS" src="ProjektC/images/1.png" alt="Seite 1">
+      </div>
+      <button class="nav-button" id="prevBtnFS">❮</button>
+      <button class="nav-button" id="nextBtnFS">❯</button>
+    </div>
+  </div>
+
   <script>
     const totalPages = 17;
     let currentPage = 1;
     const bookImage = document.getElementById("bookImage");
+    const bookImageFS = document.getElementById("bookImageFS");
 
     function toggleButtonBar() {
       const bar = document.getElementById('buttonBar');
@@ -193,25 +269,40 @@
     function goToPage(page) {
       page = Math.max(1, Math.min(page, totalPages));
       currentPage = page;
-      document.querySelector(".page").classList.add("turning");
+      document.querySelectorAll(".page").forEach(p => p.classList.add("turning"));
       setTimeout(() => {
-        bookImage.src = `ProjektC/images/${currentPage}.png`;
+        const newSrc = `ProjektC/images/${currentPage}.png`;
+        bookImage.src = newSrc;
+        bookImageFS.src = newSrc;
         document.getElementById("pageInput").value = currentPage;
-        document.querySelector(".page").classList.remove("turning");
+        document.querySelectorAll(".page").forEach(p => p.classList.remove("turning"));
       }, 150);
     }
 
     document.getElementById("prevBtn").addEventListener("click", () => goToPage(currentPage - 1));
     document.getElementById("nextBtn").addEventListener("click", () => goToPage(currentPage + 1));
+    document.getElementById("prevBtnFS").addEventListener("click", () => goToPage(currentPage - 1));
+    document.getElementById("nextBtnFS").addEventListener("click", () => goToPage(currentPage + 1));
+
     document.getElementById("pageInput").addEventListener("input", (e) => {
       const val = parseInt(e.target.value);
       if (!isNaN(val)) goToPage(val);
     });
+
+    document.getElementById("fullscreenBtn").addEventListener("click", () => {
+      document.getElementById("overlay").style.display = "flex";
+    });
+
+    document.getElementById("exitFullscreenBtn").addEventListener("click", () => {
+      document.getElementById("overlay").style.display = "none";
+    });
+
     document.getElementById("backBtn").addEventListener("click", () => goToPage(1));
 
     document.addEventListener("keydown", (e) => {
       if (e.key === "ArrowLeft") goToPage(currentPage - 1);
       if (e.key === "ArrowRight") goToPage(currentPage + 1);
+      if (e.key === "Escape") document.getElementById("overlay").style.display = "none";
     });
 
     let touchStartX = 0;
