@@ -33,26 +33,10 @@
       touch-action: pan-y;
     }
 
-    .page {
+    #book {
       position: relative;
       width: 100%;
       height: 100%;
-    }
-
-    .page img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      transition: opacity 0.4s ease-in-out;
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .page img.active {
-      opacity: 1;
-      pointer-events: auto;
     }
 
     .nav-button {
@@ -199,12 +183,7 @@
 </head>
 <body>
   <div class="book-wrapper" id="bookWrapper">
-    <div class="page">
-      <img id="imgA" class="active" src="ProjektC/images/1.png" alt="Seite 1">
-      <img id="imgB" src="" alt="">
-    </div>
-    <button class="nav-button" id="prevBtn">❮</button>
-    <button class="nav-button" id="nextBtn">❯</button>
+    <div id="book"></div>
   </div>
 
   <button class="button-bar-toggle" onclick="toggleButtonBar()"></button>
@@ -221,96 +200,57 @@
   <div id="overlay">
     <div id="fullscreen-container">
       <button id="exitFullscreenBtn">✕</button>
-      <div class="page">
-        <img id="imgAFS" class="active" src="ProjektC/images/1.png" alt="Seite 1">
-        <img id="imgBFS" src="" alt="">
-      </div>
-      <button class="nav-button" id="prevBtnFS">❮</button>
-      <button class="nav-button" id="nextBtnFS">❯</button>
+      <div id="bookFS"></div>
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
   <script>
     const totalPages = 17;
-    let currentPage = 1;
+    let pageFlip, pageFlipFS;
 
-    function goToPage(page) {
-      page = Math.max(1, Math.min(page, totalPages));
-      if (page === currentPage) return;
-      currentPage = page;
-      const newSrc = `ProjektC/images/${currentPage}.png`;
-
-      const tempImg = new Image();
-      tempImg.src = newSrc;
-      tempImg.onload = () => {
-        const [imgA, imgB] = [document.getElementById("imgA"), document.getElementById("imgB")];
-        const [imgAFS, imgBFS] = [document.getElementById("imgAFS"), document.getElementById("imgBFS")];
-
-        const [active, hidden] = imgA.classList.contains("active") ? [imgA, imgB] : [imgB, imgA];
-        const [activeFS, hiddenFS] = imgAFS.classList.contains("active") ? [imgAFS, imgBFS] : [imgBFS, imgAFS];
-
-        hidden.src = newSrc;
-        hidden.classList.add("active");
-        active.classList.remove("active");
-
-        hiddenFS.src = newSrc;
-        hiddenFS.classList.add("active");
-        activeFS.classList.remove("active");
-
-        document.getElementById("pageInput").value = currentPage;
-      };
+    function initFlip(element) {
+      const pf = new St.PageFlip(element, {
+        width: 800, height: 600, size: 'stretch',
+        maxShadowOpacity: 0.5, mobileScrollSupport: false,
+        drawShadow: true, showCover: false, flippingTime: 700,
+        usePortrait: true, autoSize: true
+      });
+      pf.loadFromImages(Array.from({ length: totalPages }, (_, i) => `ProjektC/images/${i + 1}.png`));
+      return pf;
     }
 
-    document.getElementById("prevBtn").addEventListener("click", () => goToPage(currentPage - 1));
-    document.getElementById("nextBtn").addEventListener("click", () => goToPage(currentPage + 1));
-    document.getElementById("prevBtnFS").addEventListener("click", () => goToPage(currentPage - 1));
-    document.getElementById("nextBtnFS").addEventListener("click", () => goToPage(currentPage + 1));
+    pageFlip = initFlip(document.getElementById('book'));
+    pageFlipFS = initFlip(document.getElementById('bookFS'));
 
-    document.getElementById("pageInput").addEventListener("input", (e) => {
-      const val = parseInt(e.target.value);
-      if (!isNaN(val)) goToPage(val);
+    pageFlip.on('flip', e => document.getElementById('pageInput').value = e.data + 1);
+    pageFlipFS.on('flip', e => document.getElementById('pageInput').value = e.data + 1);
+
+    document.getElementById('prevBtn')?.addEventListener('click', () => pageFlip.flipPrev());
+    document.getElementById('nextBtn')?.addEventListener('click', () => pageFlip.flipNext());
+    document.getElementById('fullscreenBtn').addEventListener('click', () => {
+      overlay.style.display = 'flex'; pageFlipFS.updateFromImages(pageFlip.getPageCount());
+    });
+    document.getElementById('exitFullscreenBtn').addEventListener('click', () => overlay.style.display = 'none');
+    document.getElementById('backBtn').addEventListener('click', () => pageFlip.flip(0));
+    document.getElementById('pageInput').addEventListener('change', e => {
+      const n = parseInt(e.target.value, 10);
+      if (!isNaN(n) && n >= 1 && n <= totalPages) pageFlip.flip(n - 1), pageFlipFS.flip(n - 1);
     });
 
-    document.getElementById("fullscreenBtn").addEventListener("click", () => {
-      document.getElementById("overlay").style.display = "flex";
-    });
-
-    document.getElementById("exitFullscreenBtn").addEventListener("click", () => {
-      document.getElementById("overlay").style.display = "none";
-    });
-
-    document.getElementById("backBtn").addEventListener("click", () => goToPage(1));
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowLeft") goToPage(currentPage - 1);
-      if (e.key === "ArrowRight") goToPage(currentPage + 1);
-      if (e.key === "Escape") document.getElementById("overlay").style.display = "none";
-    });
-
-    const wrapper = document.getElementById("bookWrapper");
-    const fullscreenContainer = document.getElementById("fullscreen-container");
-    [wrapper, fullscreenContainer].forEach(container => {
-      let touchStartX = 0;
-      container.addEventListener("touchstart", (e) => {
-        touchStartX = e.changedTouches[0].screenX;
-      });
-      container.addEventListener("touchend", (e) => {
-        let touchEndX = e.changedTouches[0].screenX;
-        if (touchEndX < touchStartX - 50) goToPage(currentPage + 1);
-        if (touchEndX > touchStartX + 50) goToPage(currentPage - 1);
-      });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft') pageFlip.flipPrev();
+      if (e.key === 'ArrowRight') pageFlip.flipNext();
+      if (e.key === 'Escape') overlay.style.display = 'none';
     });
 
     function toggleButtonBar() {
-      const bar = document.getElementById('buttonBar');
-      bar.classList.toggle('active');
+      document.getElementById('buttonBar').classList.toggle('active');
     }
 
     window.onload = () => {
-      const isSmallScreen = window.innerWidth <= 768;
-      const bar = document.getElementById('buttonBar');
-      if (!isSmallScreen) bar.classList.add('active');
-    }
+      if (window.innerWidth > 768) document.getElementById('buttonBar').classList.add('active');
+    };
   </script>
 </body>
 </html>
