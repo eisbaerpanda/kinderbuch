@@ -120,6 +120,8 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      transform: scale(1.25);
+      transform-origin: center;
     }
 
     #fullscreen-container .page {
@@ -135,8 +137,7 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
-      transition: transform 0.3s ease-in-out;
-      transform: scale(1.25);
+      transition: opacity 0.3s ease-in-out;
     }
 
     #prevBtnFS, #nextBtnFS, #exitFullscreenBtn {
