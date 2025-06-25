@@ -40,31 +40,23 @@
 <body>
   <h1>Das kleine Chamäleon findet seinen Platz</h1>
   <div id="flipbook">
-    <!-- Automatisch erzeugte Seiten 1 bis 17 -->
-    
-    <!-- Begin Seiten -->
-    
-    <!-- prettier-ignore -->
-    <!-- Die Seiten werden hier dynamisch generiert -->
-    
-    <script>
-      const flipbook = document.createElement('div');
-      flipbook.id = "flipbook";
-
-      for (let i = 1; i <= 17; i++) {
-        const page = document.createElement('div');
-        page.className = 'page';
-
-        const img = document.createElement('img');
-        img.src = `images/${i}.png`;
-        img.alt = `Seite ${i}`;
-
-        page.appendChild(img);
-        flipbook.appendChild(page);
-      }
-
-      document.body.insertBefore(flipbook, document.body.lastElementChild);
-    </script>
+    <div class="page"><img src="images/1.png" alt="Seite 1"></div>
+    <div class="page"><img src="images/2.png" alt="Seite 2"></div>
+    <div class="page"><img src="images/3.png" alt="Seite 3"></div>
+    <div class="page"><img src="images/4.png" alt="Seite 4"></div>
+    <div class="page"><img src="images/5.png" alt="Seite 5"></div>
+    <div class="page"><img src="images/6.png" alt="Seite 6"></div>
+    <div class="page"><img src="images/7.png" alt="Seite 7"></div>
+    <div class="page"><img src="images/8.png" alt="Seite 8"></div>
+    <div class="page"><img src="images/9.png" alt="Seite 9"></div>
+    <div class="page"><img src="images/10.png" alt="Seite 10"></div>
+    <div class="page"><img src="images/11.png" alt="Seite 11"></div>
+    <div class="page"><img src="images/12.png" alt="Seite 12"></div>
+    <div class="page"><img src="images/13.png" alt="Seite 13"></div>
+    <div class="page"><img src="images/14.png" alt="Seite 14"></div>
+    <div class="page"><img src="images/15.png" alt="Seite 15"></div>
+    <div class="page"><img src="images/16.png" alt="Seite 16"></div>
+    <div class="page"><img src="images/17.png" alt="Seite 17"></div>
 
   </div>
 
