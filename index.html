@@ -9,12 +9,49 @@
       margin: 0;
       padding: 0;
       height: 100%;
-      background: linear-gradient(135deg, #fef6e4, #d0e8f2);
+      background: linear-gradient(135deg, #fefae0, #d4e6b5);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       font-family: sans-serif;
+    }
+
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    #fullscreen-container {
+      width: 80vw;
+      height: auto;
+      max-height: 90vh;
+      background-color: #eaeaea;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+      position: relative;
+      padding: 1rem;
+    }
+
+    #exitFullscreenBtn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      border: none;
+      padding: 0.5rem;
+      cursor: pointer;
+      font-size: 1rem;
+      border-radius: 4px;
+      z-index: 10;
     }
 
     #book-container {
@@ -138,14 +175,18 @@
   </style>
 </head>
 <body>
-
-  <div id="book-container">
-    <div id="loading">Lädt...</div>
-    <button class="nav-button" id="prevBtn">&#8249;</button>
-    <div id="page">
-      <img id="bookImage" src="images/1.png" alt="Seite 1">
+  <div id="overlay">
+    <div id="fullscreen-container">
+      <button id="exitFullscreenBtn">✕</button>
+      <div id="book-container">
+        <div id="loading">Lädt...</div>
+        <button class="nav-button" id="prevBtn">&#8249;</button>
+        <div id="page">
+          <img id="bookImage" src="images/1.png" alt="Seite 1">
+        </div>
+        <button class="nav-button" id="nextBtn">&#8250;</button>
+      </div>
     </div>
-    <button class="nav-button" id="nextBtn">&#8250;</button>
   </div>
 
   <div id="page-controls">
@@ -158,13 +199,16 @@
   <button id="backBtn">⇦ Zurück zur Startseite</button>
 
   <script>
-    const totalPages = 17;
+    const totalPages = 25;
     let currentPage = 1;
     const bookImage = document.getElementById("bookImage");
     const prevBtn = document.getElementById("prevBtn");
     const nextBtn = document.getElementById("nextBtn");
     const pageInput = document.getElementById("pageInput");
     const loading = document.getElementById("loading");
+    const overlay = document.getElementById("overlay");
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
+    const exitFullscreenBtn = document.getElementById("exitFullscreenBtn");
 
     function updatePage(fade = true) {
       loading.style.display = "flex";
@@ -202,17 +246,22 @@
       }
     });
 
-    document.getElementById("fullscreenBtn").addEventListener("click", () => {
-      const book = document.getElementById("book-container");
-      if (!document.fullscreenElement) {
-        book.requestFullscreen();
-      } else {
-        document.exitFullscreen();
-      }
+    fullscreenBtn.addEventListener("click", () => {
+      overlay.style.display = "flex";
+    });
+
+    exitFullscreenBtn.addEventListener("click", () => {
+      overlay.style.display = "none";
     });
 
     document.getElementById("backBtn").addEventListener("click", () => {
       window.location.href = "index.html";
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && overlay.style.display === "flex") {
+        overlay.style.display = "none";
+      }
     });
   </script>
 </body>
