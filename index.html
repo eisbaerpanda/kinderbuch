@@ -309,8 +309,11 @@
     );
 
     pageInput.addEventListener("input", () => {
-      const val = parseInt(pageInput.value);
+      let val = parseInt(pageInput.value);
       if (!isNaN(val)) {
+        if (val > totalPages) val = totalPages;
+        if (val < 1) val = 1;
+        pageInput.value = val;
         goToPage(val);
       }
     });
