@@ -146,6 +146,8 @@
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
+      transform: scale(1.5);
+      transition: transform 0.3s ease-in-out;
     }
 
     #exitFullscreenBtn {
@@ -180,7 +182,6 @@
   </style>
 </head>
 <body>
-  <!-- Bestehender Buchbereich -->
   <div class="book-wrapper">
     <div id="loading">Lädt...</div>
     <button class="nav-button" id="prevBtn">&#8249;</button>
@@ -199,7 +200,6 @@
   <button id="fullscreenBtn">⛶ Vollbild</button>
   <button id="backBtn">⇦ Zurück zum Anfang</button>
 
-  <!-- Vollbild Overlay -->
   <div id="overlay">
     <div id="fullscreen-container">
       <button id="exitFullscreenBtn">✕</button>
@@ -274,7 +274,6 @@
 
     fullscreenBtn.addEventListener("click", () => overlay.style.display = "flex");
     exitFullscreenBtn.addEventListener("click", () => overlay.style.display = "none");
-
     backBtn.addEventListener("click", () => goToPage(1));
 
     document.addEventListener("keydown", (e) => {
