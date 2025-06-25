@@ -33,26 +33,10 @@
       touch-action: pan-y;
     }
 
-    .page {
+    #book {
       position: relative;
       width: 100%;
       height: 100%;
-    }
-
-    .page img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      transition: opacity 0.4s ease-in-out;
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .page img.active {
-      opacity: 1;
-      pointer-events: auto;
     }
 
     .nav-button {
