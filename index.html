@@ -70,39 +70,37 @@
 
     .button-bar {
       position: fixed;
-      bottom: 1rem;
-      left: 50%;
-      transform: translateX(-50%);
+      bottom: 0;
+      left: 0;
+      width: 100%;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       align-items: center;
-      gap: 1rem;
-      background-color: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(6px);
-      border-radius: 12px;
-      padding: 0.75rem 1.5rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      gap: 0.5rem;
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid #ccc;
+      padding: 0.75rem;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
       z-index: 100;
     }
 
     .button-bar button, .button-bar input, .download-btn {
-      background-color: rgba(255, 255, 255, 0.4);
-      backdrop-filter: blur(8px);
-      border: none;
-      border-radius: 8px;
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
       padding: 0.5rem 1rem;
       font-size: 1rem;
       color: #222;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
       text-decoration: none;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .button-bar button:hover, .download-btn:hover {
-      background-color: rgba(255, 255, 255, 0.6);
-      transform: scale(1.05);
+      background-color: #f4f4f4;
     }
 
     .button-bar input {
@@ -200,27 +198,28 @@
     @media screen and (max-width: 768px) {
       .book-wrapper,
       #fullscreen-container {
-        width: 95vw;
+        width: 100vw;
         height: auto;
         aspect-ratio: 1302 / 920;
       }
 
       .nav-button {
-        font-size: 1.5rem;
-        padding: 0.5rem;
+        font-size: 1.2rem;
+        padding: 0.4rem;
       }
 
       .button-bar {
-        flex-direction: column;
-        width: 90vw;
-        bottom: 0.5rem;
-        padding: 0.75rem;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 0.5rem;
       }
 
       .button-bar button, .button-bar input, .download-btn {
-        width: 100%;
-        font-size: 1rem;
-        padding: 0.75rem 1rem;
+        flex: 1 1 calc(50% - 1rem);
+        min-width: 120px;
+        font-size: 0.95rem;
+        padding: 0.5rem 0.75rem;
       }
 
       #exitFullscreenBtn {
