@@ -1,117 +1,715 @@
-<!DOCTYPE html>
+<!DOCTYPE html>More actions
+
 <html lang="de">
+
 <head>
+
   <meta charset="UTF-8" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Das kleine Chamäleon</title>
-  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+
+    html, body {
+
+      margin: 0;
+
+      padding: 0;
+
+      min-height: 100vh;
+
+      background: linear-gradient(to bottom right, #fef6e4, #d8e2dc);
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+      align-items: center;
+
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+    }
+
+
+
+    .book-wrapper {
+
+      position: relative;
+
+      width: 1302px;
+
+      height: 920px;
+
+      background-color: #ffffff;
+
+
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.35); /* verstärkter Schatten */
+
+
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.35);
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      overflow: hidden;
+
+      margin: 2rem 0;
+
+    }
+
+
+
+    .page {
+
+      width: 100%;
+
+      height: 100%;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+    }
+
+
+
+    .page img {
+
+      width: 100%;
+
+      height: 100%;
+
+      object-fit: contain;
+
+      transition: opacity 0.5s ease-in-out;
+
+      opacity: 1;
+
+    }
+
+
+
+    .nav-button {
+
+      position: absolute;
+
+      top: 50%;
+
+      transform: translateY(-50%);
+
+      background-color: rgba(0, 0, 0, 0.5);
+
+      color: white;
+
+      border: none;
+
+      padding: 1rem;
+
+      cursor: pointer;
+
+      font-size: 2rem;
+
+      z-index: 10;
+
+    }
+
+
+
+    .nav-button:hover {
+
+      background-color: rgba(0, 0, 0, 0.8);
+
+    }
+
+
+
+    #prevBtn, #prevBtnFS { left: 0; }
+
+    #nextBtn, #nextBtnFS { right: 0; }
+
+
+
+    .button-bar {
+
+      display: flex;
+
+      flex-wrap: wrap;
+
+      justify-content: center;
+
+      align-items: center;
+
+      gap: 1rem;
+
+      margin-bottom: 2rem;
+
+    }
+
+
+
+    .button-bar button, .button-bar input, .download-btn {
+
+
+      background-color: rgba(255, 255, 255, 0.6); /* heller Hintergrund */
+
+
+      background-color: rgba(255, 255, 255, 0.6);
+
+      backdrop-filter: blur(8px);
+
+      border: none;
+
+      border-radius: 8px;
+
+      padding: 0.5rem 1rem;
+
+      font-size: 1rem;
+
+      color: #222;
+
+      cursor: pointer;
+
+      transition: all 0.3s ease;
+
+      text-decoration: none;
+
+
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* leichter Schatten für Tiefe */
+
+
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+
+    }
+
+
+
+    .button-bar button:hover, .download-btn:hover {
+
+      background-color: rgba(255, 255, 255, 0.8);
+
+      transform: scale(1.05);
+
+    }
+
+
+
+    .button-bar input {
+
+      width: 60px;
+
+      text-align: center;
+
+    }
+
+
+
+    #overlay {
+
+      position: fixed;
+
+      top: 0;
+
+      left: 0;
+
+      width: 100vw;
+
+      height: 100vh;
+
+      background-color: rgba(0, 0, 0, 0.85);
+
+      display: none;
+
+      justify-content: center;
+
+      align-items: center;
+
+      z-index: 1000;
+
+    }
+
+
+
+    #fullscreen-container {
+
+      width: calc(1302px * 1.4);
+
+      height: calc(920px * 1.4);
+
+      background-color: #ffffff;
+
+
+      box-shadow: 0 0 60px rgba(0, 0, 0, 0.4); /* verstärkter Schatten */
+
+
+      box-shadow: 0 0 60px rgba(0, 0, 0, 0.4);
+
+      position: relative;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      overflow: hidden;
+
+    }
+
+
+
+    #fullscreen-container .page {
+
+      width: 100%;
+
+      height: 100%;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      position: relative;
+
+    }
+
+
+
+    #fullscreen-container .page img {
+
+      max-width: 100%;
+
+      max-height: 100%;
+
+      object-fit: contain;
+
+      transition: opacity 0.3s ease-in-out;
+
+    }
+
+
+
+    #prevBtnFS, #nextBtnFS, #exitFullscreenBtn {
+
+      position: absolute;
+
+      z-index: 10;
+
+    }
+
+
+
+    #prevBtnFS {
+
+      left: 0;
+
+      top: 50%;
+
+      transform: translateY(-50%);
+
+    }
+
+
+
+    #nextBtnFS {
+
+      right: 0;
+
+      top: 50%;
+
+      transform: translateY(-50%);
+
+    }
+
+
+
+    #exitFullscreenBtn {
+
+      top: 10px;
+
+      right: 10px;
+
+      background-color: rgba(0, 0, 0, 0.6);
+
+      color: white;
+
+      border: none;
+
+      padding: 0.5rem;
+
+      cursor: pointer;
+
+      font-size: 1rem;
+
+      border-radius: 4px;
+
+    }
+
+
+
+    #loading {
+
+      position: absolute;
+
+      top: 0;
+
+      left: 0;
+
+      right: 0;
+
+      bottom: 0;
+
+      background-color: rgba(255, 255, 255, 0.7);
+
+      display: none;
+
+      align-items: center;
+
+      justify-content: center;
+
+      font-size: 1.5rem;
+
+      font-weight: bold;
+
+      color: #333;
+
+      z-index: 5;
+
+    }
+
+
+
+
+
+    @media screen and (max-width: 768px) {
+
+
+      .book-wrapper {
+
+
+        width: 90vw;
+
+
+        height: auto;
+
+
+        aspect-ratio: 1302 / 920;
+
+
+      }
+
+
+
+
+
+      #fullscreen-container {
+
+
+        width: 95vw;
+
+
+        height: auto;
+
+
+        aspect-ratio: 1302 / 920;
+
+
+      }
+
+
+
+
+
+      .nav-button {
+
+
+        font-size: 1.5rem;
+
+
+        padding: 0.5rem;
+
+
+      }
+
+
+
+
+
+      .button-bar {
+
+
+        flex-direction: column;
+
+
+        gap: 0.5rem;
+
+
+        align-items: stretch;
+
+
+      }
+
+
+
+
+
+      .button-bar button, .button-bar input, .download-btn {
+
+
+        width: 100%;
+
+
+        font-size: 1rem;
+
+
+        padding: 0.75rem 1rem;
+
+
+      }
+
+
+
+
+
+      #exitFullscreenBtn {
+
+
+        top: 5px;
+
+
+        right: 5px;
+
+
+        font-size: 0.9rem;
+
+
+        padding: 0.4rem;
+
+
+      }
+
+
+    }
+
+  </style>
+
 </head>
+
 <body>
+
   <div class="book-wrapper">
+
     <div id="loading">Lädt...</div>
+
     <button class="nav-button" id="prevBtn">&#8249;</button>
+
     <div class="page">
+
       <img id="bookImage" src="ProjektC/images/1.png" alt="Seite 1">
+
     </div>
+
     <button class="nav-button" id="nextBtn">&#8250;</button>
+
   </div>
+
+
 
   <div class="button-bar">
+
     <label for="pageInput">Seite:</label>
+
     <input type="number" id="pageInput" min="1" max="17" value="1">
+
     <span>/ 17</span>
+
     <button id="fullscreenBtn">⛶ Vollbild</button>
+
     <button id="backBtn">⇦ Zurück zum Anfang</button>
+
     <a href="ProjektC/das-kleine-chamaeleon.pdf" download class="download-btn">📄 PDF herunterladen</a>
+
   </div>
+
+
 
   <div id="overlay">
+
     <div id="fullscreen-container">
+
       <button id="exitFullscreenBtn">✕</button>
+
       <div class="page">
+
         <img id="bookImageFS" src="ProjektC/images/1.png" alt="Seite 1">
+
       </div>
+
       <button class="nav-button" id="prevBtnFS">&#8249;</button>
+
       <button class="nav-button" id="nextBtnFS">&#8250;</button>
+
     </div>
+
   </div>
 
+
+
   <script>
+
     const totalPages = 17;
+
     let currentPage = 1;
 
+
+
     const bookImage = document.getElementById("bookImage");
+
     const bookImageFS = document.getElementById("bookImageFS");
+
     const prevBtn = document.getElementById("prevBtn");
+
     const nextBtn = document.getElementById("nextBtn");
+
     const prevBtnFS = document.getElementById("prevBtnFS");
+
     const nextBtnFS = document.getElementById("nextBtnFS");
+
     const pageInput = document.getElementById("pageInput");
+
     const loading = document.getElementById("loading");
+
     const overlay = document.getElementById("overlay");
+
     const fullscreenBtn = document.getElementById("fullscreenBtn");
+
     const exitFullscreenBtn = document.getElementById("exitFullscreenBtn");
+
     const backBtn = document.getElementById("backBtn");
 
+
+
     function updatePage(fade = true) {
+
       loading.style.display = "flex";
+
       if (fade) {
+
         bookImage.style.opacity = 0;
+
         bookImageFS.style.opacity = 0;
+
       }
+
+
 
       const newImg = new Image();
+
       newImg.src = `ProjektC/images/${currentPage}.png`;
+
       newImg.onload = () => {
+
         bookImage.src = newImg.src;
+
         bookImageFS.src = newImg.src;
+
         bookImage.alt = `Seite ${currentPage}`;
+
         bookImageFS.alt = `Seite ${currentPage}`;
+
         pageInput.value = currentPage;
+
         loading.style.display = "none";
+
         if (fade) {
+
           bookImage.style.opacity = 1;
+
           bookImageFS.style.opacity = 1;
+
         }
+
       };
+
     }
+
+
 
     function goToPage(num) {
+
       if (num < 1) num = 1;
+
       if (num > totalPages) num = totalPages;
+
       currentPage = num;
-      pageInput.value = num;
+
       updatePage();
+
     }
 
+
+
     [prevBtn, prevBtnFS].forEach(btn =>
+
       btn.addEventListener("click", () => goToPage(currentPage - 1))
+
     );
+
     [nextBtn, nextBtnFS].forEach(btn =>
+
       btn.addEventListener("click", () => goToPage(currentPage + 1))
+
     );
+
+
 
     pageInput.addEventListener("input", () => {
-      let val = parseInt(pageInput.value);
+
+      const val = parseInt(pageInput.value);
+
       if (!isNaN(val)) {
-        if (val > totalPages) val = totalPages;
-        if (val < 1) val = 1;
-        pageInput.value = val;
+
         goToPage(val);
+
       }
+
     });
+
+
 
     fullscreenBtn.addEventListener("click", () => overlay.style.display = "flex");
+
     exitFullscreenBtn.addEventListener("click", () => overlay.style.display = "none");
+
     backBtn.addEventListener("click", () => goToPage(1));
 
+
+
     document.addEventListener("keydown", (e) => {
+
       if (e.key === "Escape" && overlay.style.display === "flex") {
+
         overlay.style.display = "none";
+
       }
+
     });
 
+
+
     window.onload = () => updatePage(false);
+
   </script>
+
 </body>
+
 </html>
