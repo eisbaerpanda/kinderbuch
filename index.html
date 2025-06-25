@@ -180,6 +180,12 @@
   </style>
 </head>
 <body>
+  <!-- Thumbnail-Leiste -->
+  <div id="thumbnails" style="display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; margin-top: 1rem;">
+    <!-- Thumbnails werden dynamisch eingefügt -->
+  </div>
+
+  <!-- Bestehender Buchbereich -->
   <div class="book-wrapper">
     <div id="loading">Lädt...</div>
     <button class="nav-button" id="prevBtn">&#8249;</button>
@@ -198,6 +204,7 @@
   <button id="fullscreenBtn">⛶ Vollbild</button>
   <button id="backBtn">⇦ Zurück zum Anfang</button>
 
+  <!-- Vollbild Overlay -->
   <div id="overlay">
     <div id="fullscreen-container">
       <button id="exitFullscreenBtn">✕</button>
@@ -225,6 +232,7 @@
     const fullscreenBtn = document.getElementById("fullscreenBtn");
     const exitFullscreenBtn = document.getElementById("exitFullscreenBtn");
     const backBtn = document.getElementById("backBtn");
+    const thumbnailContainer = document.getElementById("thumbnails");
 
     function updatePage(fade = true) {
       loading.style.display = "flex";
@@ -275,6 +283,19 @@
         overlay.style.display = "none";
       }
     });
+
+    // Thumbnails generieren
+    for (let i = 1; i <= totalPages; i++) {
+      const thumb = document.createElement("img");
+      thumb.src = `images/${i}.png`;
+      thumb.alt = `Seite ${i}`;
+      thumb.style.width = "70px";
+      thumb.style.height = "auto";
+      thumb.style.cursor = "pointer";
+      thumb.style.border = "2px solid transparent";
+      thumb.addEventListener("click", () => goToPage(i));
+      thumbnailContainer.appendChild(thumb);
+    }
 
     window.onload = () => updatePage(false);
   </script>
