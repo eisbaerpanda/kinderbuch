@@ -190,7 +190,7 @@
     <div id="loading">Lädt...</div>
     <button class="nav-button" id="prevBtn">&#8249;</button>
     <div class="page">
-      <img id="bookImage" src="images/1.png" alt="Seite 1">
+      <img id="bookImage" src="ProjektC/images/1.png" alt="Seite 1">
     </div>
     <button class="nav-button" id="nextBtn">&#8250;</button>
   </div>
@@ -201,14 +201,14 @@
     <span>/ 17</span>
     <button id="fullscreenBtn">⛶ Vollbild</button>
     <button id="backBtn">⇦ Zurück zum Anfang</button>
-    <a href="buch.pdf" download class="download-btn">📄 PDF herunterladen</a>
+    <a href="ProjektC/buch.pdf" download class="download-btn">📄 PDF herunterladen</a>
   </div>
 
   <div id="overlay">
     <div id="fullscreen-container">
       <button id="exitFullscreenBtn">✕</button>
       <div class="page">
-        <img id="bookImageFS" src="images/1.png" alt="Seite 1">
+        <img id="bookImageFS" src="ProjektC/images/1.png" alt="Seite 1">
       </div>
       <button class="nav-button" id="prevBtnFS">&#8249;</button>
       <button class="nav-button" id="nextBtnFS">&#8250;</button>
@@ -240,7 +240,7 @@
       }
 
       const newImg = new Image();
-      newImg.src = `images/${currentPage}.png`;
+      newImg.src = `ProjektC/images/${currentPage}.png`;
       newImg.onload = () => {
         bookImage.src = newImg.src;
         bookImageFS.src = newImg.src;
