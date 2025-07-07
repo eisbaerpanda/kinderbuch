@@ -200,7 +200,7 @@
 <body>
   <div class="book-wrapper" id="bookWrapper">
     <div class="page">
-      <img id="imgA" class="active" src="ProjektC/images/00.png" alt="Seite 0">
+      <img id="imgA" class="active" src="images/00.jpg" alt="Seite 0">
       <img id="imgB" src="" alt="">
     </div>
     <button class="nav-button" id="prevBtn">❮</button>
@@ -215,14 +215,14 @@
     <span>/ 23</span>
     <button id="fullscreenBtn">⛶ Vollbild</button>
     <button id="backBtn">⇦ Zurück zum Anfang</button>
-    <a href="ProjektC/das-kleine-chamaeleon.pdf" download class="download-btn">📄 PDF herunterladen</a>
+    <a href="das-kleine-chamaeleon.pdf" download class="download-btn">📄 PDF herunterladen</a>
   </div>
 
   <div id="overlay">
     <div id="fullscreen-container">
       <button id="exitFullscreenBtn">✕</button>
       <div class="page">
-        <img id="imgAFS" class="active" src="ProjektC/images/00.png" alt="Seite 0">
+        <img id="imgAFS" class="active" src="images/00.jpg" alt="Seite 0">
         <img id="imgBFS" src="" alt="">
       </div>
       <button class="nav-button" id="prevBtnFS">❮</button>
@@ -238,7 +238,7 @@
       page = Math.max(0, Math.min(page, totalPages - 1));
       if (page === currentPage) return;
       currentPage = page;
-      const newSrc = `ProjektC/images/${String(currentPage).padStart(2, '0')}.png`;
+      const newSrc = `images/${String(currentPage).padStart(2, '0')}.jpg`;
 
       const tempImg = new Image();
       tempImg.src = newSrc;
