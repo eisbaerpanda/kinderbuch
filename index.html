@@ -114,7 +114,7 @@
     }
     .nav-button:hover { background: var(--btn-hover); }
 
-    /* Pfeile einrücken, damit sie nicht an der Kante verschwinden */
+    /* leichte Einrückung, damit der rechte Pfeil nicht abgeschnitten wird */
     #prevBtn, #prevBtnFS {
       left: 0.5rem;
     }
@@ -219,46 +219,43 @@
       z-index: 10;
     }
     :focus { outline: 3px solid #4D90FE; outline-offset: 2px; }
-
-    /* ================================
-       Mobile-Optimierungen ≤768px
-       ================================ */
-    @media (max-width: 768px) {
-      /* Pfeile immer sichtbar auf Touch */
+    @media(max-width:768px) {
       .nav-button {
+        /* Pfeile auf Touch-Devices immer anzeigen */
         opacity: 1 !important;
       }
-      /* Seite scrollbar erlauben */
       html, body {
+        /* erlauben zu scrollen, wenn Wrapper zu hoch */
         height: auto;
         overflow: auto;
         justify-content: flex-start;
       }
-      /* Wrapper anpassen, damit nichts abgeschnitten wird */
       .book-wrapper {
+        /* auf 95vw Breite und max. 50vh Höhe */
         width: 95vw;
         max-height: 50vh;
         margin: 2vh 0;
       }
-      /* Button-Bar vertikal und zentriert */
       .button-bar {
-        position: absolute;
+        /* horizontale Leiste zentriert unten */
+        position: fixed;
         bottom: env(safe-area-inset-bottom, 1rem);
         left: 50%;
         transform: translateX(-50%);
         width: 90%;
         max-width: 400px;
-        flex-direction: column;
+        flex-direction: row;
+        flex-wrap: wrap;
         gap: 0.5rem;
-        padding: 1rem;
+        padding: 0.75rem 1rem;
       }
       .button-bar-toggle {
         bottom: env(safe-area-inset-bottom, 1rem);
       }
     }
-    /* Im Landscape etwas mehr Höhe für das Buch */
-    @media (max-width: 768px) and (orientation: landscape) {
+    @media(max-width:768px) and (orientation: landscape) {
       .book-wrapper {
+        /* im Querformat etwas mehr Höhe */
         max-height: 70vh;
       }
     }
