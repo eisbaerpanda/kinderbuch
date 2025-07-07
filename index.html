@@ -5,21 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Das kleine Chamäleon</title>
   <style>
-    :root {
-      --bg-start: #fef6e4;
-      --bg-end:   #d8e2dc;
-      --btn-bg:   rgba(0, 0, 0, 0.5);
-      --btn-hover: rgba(0, 0, 0, 0.8);
-      --overlay-bg: rgba(0, 0, 0, 0.85);
-      --card-shadow: rgba(0, 0, 0, 0.3);
-    }
-
     html, body {
       margin: 0;
       padding: 0;
       height: 100vh;
       overflow: hidden;
-      background: linear-gradient(to bottom right, var(--bg-start), var(--bg-end));
+      background: linear-gradient(to bottom right, #fef6e4, #d8e2dc);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -30,19 +21,17 @@
     .book-wrapper {
       position: relative;
       width: min(1302px, 95vw);
+      max-height: 80vh; /* neue Max-Höhe für große Bildschirme */
+      height: auto;
       aspect-ratio: 6404 / 4269;
-      background-color: #fff;
-      box-shadow: 0 15px 45px var(--card-shadow);
+      background-color: #ffffff;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
       margin: 2rem 0 6rem;
       touch-action: pan-y;
-    }
-    /* Fallback if aspect-ratio unsupported */
-    .book-wrapper {
-      height: auto;
     }
 
     .page {
@@ -61,6 +50,7 @@
       opacity: 0;
       pointer-events: none;
     }
+
     .page img.active {
       opacity: 1;
       pointer-events: auto;
@@ -70,18 +60,20 @@
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background-color: var(--btn-bg);
-      color: #fff;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
       border: none;
       padding: 0.5rem 0.75rem;
       cursor: pointer;
-      font-size: 1.2rem;
+      font-size: clamp(1rem, 2.5vw, 1.2rem); /* responsive Schriftgröße */
       z-index: 10;
       border-radius: 4px;
     }
+
     .nav-button:hover {
-      background-color: var(--btn-hover);
+      background-color: rgba(0, 0, 0, 0.8);
     }
+
     #prevBtn, #prevBtnFS { left: 0; }
     #nextBtn, #nextBtnFS { right: 0; }
 
@@ -90,21 +82,26 @@
       position: fixed;
       bottom: 0.5rem;
       right: 0.5rem;
-      background-color: var(--btn-bg);
-      color: #fff;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
       border: none;
       border-radius: 4px;
       padding: 0.5rem;
       font-size: 1.5rem;
       z-index: 101;
     }
-    .button-bar-toggle::before { content: "\2630"; }
+
+    .button-bar-toggle::before {
+      content: "\2630";
+    }
 
     .button-bar {
       position: fixed;
       bottom: 1rem;
       left: 50%;
       transform: translateX(-50%);
+      width: max-content;
+      max-width: 95vw;
       display: none;
       flex-wrap: wrap;
       justify-content: center;
@@ -117,24 +114,28 @@
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
       z-index: 100;
     }
-    .button-bar.active { display: flex; }
 
-    .button-bar button,
-    .button-bar input,
-    .download-btn {
-      background-color: #fff;
+    .button-bar.active {
+      display: flex;
+    }
+
+    .button-bar button, .button-bar input, .download-btn {
+      background-color: #ffffff;
       border: 1px solid #ccc;
       border-radius: 6px;
       padding: 0.5rem 1rem;
-      font-size: 1rem;
+      font-size: clamp(0.9rem, 2vw, 1rem); /* responsive Schriftgröße */
       color: #222;
       cursor: pointer;
       transition: all 0.2s ease;
       text-decoration: none;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    .button-bar button:hover,
-    .download-btn:hover { background-color: #f4f4f4; }
+
+    .button-bar button:hover, .download-btn:hover {
+      background-color: #f4f4f4;
+    }
+
     .button-bar input {
       width: 60px;
       text-align: center;
@@ -146,18 +147,19 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-color: var(--overlay-bg);
+      background-color: rgba(0, 0, 0, 0.85);
       display: none;
       justify-content: center;
       align-items: center;
       z-index: 1000;
     }
-    #overlay[aria-modal="true"] { display: flex; }
 
     #fullscreen-container {
       width: min(calc(1302px * 1.4), 95vw);
+      max-height: 95vh; /* neue Max-Höhe im Vollbild */
+      height: auto;
       aspect-ratio: 6404 / 4269;
-      background-color: #fff;
+      background-color: #ffffff;
       box-shadow: 0 0 60px rgba(0, 0, 0, 0.4);
       position: relative;
       display: flex;
@@ -165,6 +167,7 @@
       justify-content: center;
       overflow: hidden;
     }
+
     #fullscreen-container .page img {
       max-width: 100%;
       max-height: 100%;
@@ -174,57 +177,68 @@
       position: absolute;
       top: 10px;
       right: 10px;
-      background-color: var(--btn-bg);
-      color: #fff;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
       border: none;
       padding: 0.5rem;
       cursor: pointer;
-      font-size: 1rem;
+      font-size: clamp(0.9rem, 2vw, 1rem); /* responsive Schriftgröße */
       border-radius: 4px;
       z-index: 10;
     }
 
+    /* deutlicher Focus-Ring für bessere Zugänglichkeit */
+    :focus {
+      outline: 3px solid #4D90FE;
+      outline-offset: 2px;
+    }
+
     @media screen and (max-width: 768px) {
-      .nav-button { font-size: 1rem; padding: 0.3rem 0.5rem; }
-      .button-bar-toggle { display: block; }
+      .nav-button {
+        font-size: 1rem;
+        padding: 0.3rem 0.5rem;
+      }
+
+      .button-bar-toggle {
+        display: block;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="book-wrapper" id="bookWrapper" tabindex="0">
+  <div class="book-wrapper" id="bookWrapper">
     <div class="page">
-      <img id="imgA" class="active" loading="lazy" src="ProjektC/images/1.jpg" alt="Seite 1">
-      <img id="imgB" loading="lazy" src="" alt="">
+      <img id="imgA" class="active" src="ProjektC/images/1.jpg" alt="Seite 1">
+      <img id="imgB" src="" alt="">
     </div>
-    <button type="button" class="nav-button" id="prevBtn" aria-label="Vorherige Seite">❮</button>
-    <button type="button" class="nav-button" id="nextBtn" aria-label="Nächste Seite">❯</button>
+    <button class="nav-button" id="prevBtn">❮</button>
+    <button class="nav-button" id="nextBtn">❯</button>
   </div>
 
-  <button type="button" class="button-bar-toggle" onclick="toggleButtonBar()" aria-label="Optionen umschalten"></button>
+  <button class="button-bar-toggle" onclick="toggleButtonBar()"></button>
 
   <div class="button-bar" id="buttonBar">
     <label for="pageInput">Seite:</label>
     <input type="number" id="pageInput" min="1" max="24" value="1">
     <span>/ 24</span>
-    <button type="button" id="fullscreenBtn" aria-label="Vollbild starten">⛶ Vollbild</button>
-    <button type="button" id="backBtn" aria-label="Zurück zum Anfang">⇦ Zurück zum Anfang</button>
-    <a href="ProjektC/das-kleine-chamaeleon.pdf" download class="download-btn" role="button">📄 PDF herunterladen</a>
+    <button id="fullscreenBtn">⛶ Vollbild</button>
+    <button id="backBtn">⇦ Zurück zum Anfang</button>
+    <a href="ProjektC/das-kleine-chamaeleon.pdf" download class="download-btn">📄 PDF herunterladen</a>
   </div>
 
-  <div id="overlay" role="dialog" aria-modal="true">
-    <div id="fullscreen-container" role="document" aria-label="Vollbildansicht">
-      <button type="button" id="exitFullscreenBtn" aria-label="Vollbild beenden">✕</button>
+  <div id="overlay">
+    <div id="fullscreen-container">
+      <button id="exitFullscreenBtn">✕</button>
       <div class="page">
-        <img id="imgAFS" class="active" loading="lazy" src="ProjektC/images/1.jpg" alt="Seite 1">
-        <img id="imgBFS" loading="lazy" src="" alt="">
+        <img id="imgAFS" class="active" src="ProjektC/images/1.jpg" alt="Seite 1">
+        <img id="imgBFS" src="" alt="">
       </div>
-      <button type="button" class="nav-button" id="prevBtnFS" aria-label="Vorherige Seite">❮</button>
-      <button type="button" class="nav-button" id="nextBtnFS" aria-label="Nächste Seite">❯</button>
+      <button class="nav-button" id="prevBtnFS">❮</button>
+      <button class="nav-button" id="nextBtnFS">❯</button>
     </div>
   </div>
 
   <script>
-  (function() {
     const totalPages = 24;
     let currentPage = 1;
 
@@ -236,108 +250,75 @@
 
       const tempImg = new Image();
       tempImg.src = newSrc;
-
       tempImg.onload = () => {
-        const imgA = document.getElementById("imgA");
-        const imgB = document.getElementById("imgB");
-        const imgAFS = document.getElementById("imgAFS");
-        const imgBFS = document.getElementById("imgBFS");
+        const [imgA, imgB] = [document.getElementById("imgA"), document.getElementById("imgB")];
+        const [imgAFS, imgBFS] = [document.getElementById("imgAFS"), document.getElementById("imgBFS")];
 
-        const [active, hidden]   = imgA.classList.contains("active")   ? [imgA, imgB]   : [imgB, imgA];
+        const [active, hidden] = imgA.classList.contains("active") ? [imgA, imgB] : [imgB, imgA];
         const [activeFS, hiddenFS] = imgAFS.classList.contains("active") ? [imgAFS, imgBFS] : [imgBFS, imgAFS];
 
         hidden.src = newSrc;
-        hidden.alt = `Seite ${currentPage}`;
         hidden.classList.add("active");
         active.classList.remove("active");
 
         hiddenFS.src = newSrc;
-        hiddenFS.alt = `Seite ${currentPage}`;
         hiddenFS.classList.add("active");
         activeFS.classList.remove("active");
 
         document.getElementById("pageInput").value = currentPage;
-
-        // Preload next/prev pages
-        if (currentPage < totalPages) {
-          const p = new Image();
-          p.src = `ProjektC/images/${currentPage+1}.jpg`;
-        }
-        if (currentPage > 1) {
-          const p = new Image();
-          p.src = `ProjektC/images/${currentPage-1}.jpg`;
-        }
-      };
-
-      tempImg.onerror = () => {
-        console.error(`Fehler beim Laden von ${newSrc}`);
-        // optional: verstecke Button oder zeige Platzhalter
       };
     }
 
-    // Navigation events
     document.getElementById("prevBtn").addEventListener("click", () => goToPage(currentPage - 1));
     document.getElementById("nextBtn").addEventListener("click", () => goToPage(currentPage + 1));
     document.getElementById("prevBtnFS").addEventListener("click", () => goToPage(currentPage - 1));
     document.getElementById("nextBtnFS").addEventListener("click", () => goToPage(currentPage + 1));
-    document.getElementById("pageInput").addEventListener("input", e => {
-      const v = parseInt(e.target.value, 10);
-      if (!isNaN(v)) goToPage(v);
+
+    document.getElementById("pageInput").addEventListener("input", (e) => {
+      const val = parseInt(e.target.value);
+      if (!isNaN(val)) goToPage(val);
     });
 
-    // Fullscreen open/close with focus & scroll-lock
-    const overlay = document.getElementById("overlay");
-    const fullscreenBtn = document.getElementById("fullscreenBtn");
-    const exitBtn = document.getElementById("exitFullscreenBtn");
-    const wrapper = document.getElementById("bookWrapper");
-
-    fullscreenBtn.addEventListener("click", () => {
-      overlay.style.display = "flex";
-      document.body.style.overflow = "hidden";
-      exitBtn.focus();
+    document.getElementById("fullscreenBtn").addEventListener("click", () => {
+      document.getElementById("overlay").style.display = "flex";
     });
-    exitBtn.addEventListener("click", () => {
-      overlay.style.display = "none";
-      document.body.style.overflow = "";
-      wrapper.focus();
+
+    document.getElementById("exitFullscreenBtn").addEventListener("click", () => {
+      document.getElementById("overlay").style.display = "none";
     });
 
     document.getElementById("backBtn").addEventListener("click", () => goToPage(1));
 
-    // Keyboard support
-    document.addEventListener("keydown", e => {
-      if (e.key === "ArrowLeft")  goToPage(currentPage - 1);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") goToPage(currentPage - 1);
       if (e.key === "ArrowRight") goToPage(currentPage + 1);
-      if (e.key === "Escape" && overlay.style.display === "flex") {
-        exitBtn.click();
-      }
+      if (e.key === "Escape") document.getElementById("overlay").style.display = "none";
     });
 
-    // Touch gestures (passive listeners)
-    [wrapper, document.getElementById("fullscreen-container")].forEach(container => {
-      let startX = 0;
-      container.addEventListener("touchstart", e => {
-        startX = e.changedTouches[0].screenX;
-      }, { passive: true });
-      container.addEventListener("touchend", e => {
-        const endX = e.changedTouches[0].screenX;
-        if (endX < startX - 50) goToPage(currentPage + 1);
-        if (endX > startX + 50) goToPage(currentPage - 1);
-      }, { passive: true });
+    const wrapper = document.getElementById("bookWrapper");
+    const fullscreenContainer = document.getElementById("fullscreen-container");
+    [wrapper, fullscreenContainer].forEach(container => {
+      let touchStartX = 0;
+      container.addEventListener("touchstart", (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      });
+      container.addEventListener("touchend", (e) => {
+        let touchEndX = e.changedTouches[0].screenX;
+        if (touchEndX < touchStartX - 50) goToPage(currentPage + 1);
+        if (touchEndX > touchStartX + 50) goToPage(currentPage - 1);
+      });
     });
 
-    // Show button-bar on large screens
-    window.addEventListener("load", () => {
-      if (window.innerWidth > 768) {
-        document.getElementById("buttonBar").classList.add("active");
-      }
-    });
+    function toggleButtonBar() {
+      const bar = document.getElementById('buttonBar');
+      bar.classList.toggle('active');
+    }
 
-    // Toggle button-bar
-    window.toggleButtonBar = () => {
-      document.getElementById("buttonBar").classList.toggle("active");
-    };
-  })();
+    window.onload = () => {
+      const isSmallScreen = window.innerWidth <= 768;
+      const bar = document.getElementById('buttonBar');
+      if (!isSmallScreen) bar.classList.add('active');
+    }
   </script>
 </body>
 </html>
