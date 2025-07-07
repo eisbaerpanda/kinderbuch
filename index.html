@@ -15,6 +15,7 @@
       --lift-shadow: rgba(0,0,0,0.15);
       --text-color: #222;
     }
+
     html, body {
       margin: 0;
       padding: 0;
@@ -28,6 +29,7 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       color: var(--text-color);
     }
+
     .book-wrapper {
       position: relative;
       width: min(1302px, 95vw);
@@ -40,6 +42,7 @@
       overflow: visible; /* Allow arrows to fully display */
       touch-action: pan-y;
     }
+
     .page {
       position: relative;
       width: 100%;
@@ -47,6 +50,7 @@
       padding: 0.5%;
       box-sizing: border-box;
     }
+
     .page img {
       position: absolute;
       inset: 0;
@@ -57,10 +61,12 @@
       transition: opacity 0.4s;
       pointer-events: none;
     }
+
     .page img.active {
       opacity: 1;
       pointer-events: auto;
     }
+
     #spinner {
       position: absolute;
       top: 50%;
@@ -75,7 +81,9 @@
       display: none;
       z-index: 20;
     }
+
     @keyframes spin { to { transform: rotate(360deg); } }
+
     #errorMsg {
       position: absolute;
       top: 50%;
@@ -88,6 +96,7 @@
       display: none;
       z-index: 20;
     }
+
     .nav-button {
       position: absolute;
       top: 50%;
@@ -108,10 +117,12 @@
       transition: opacity 0.2s;
       z-index: 1000; /* ensure arrows on top */
     }
+
     .book-wrapper:hover .nav-button,
     #fullscreen-container:hover .nav-button {
       opacity: 1;
     }
+
     .nav-button:hover { background: var(--btn-hover); }
 
     /* leichte Einrückung, damit der rechte Pfeil nicht abgeschnitten wird */
@@ -136,6 +147,7 @@
       z-index: 101;
     }
     .button-bar-toggle::before { content: "☰"; }
+
     .button-bar {
       position: fixed;
       bottom: 1rem;
@@ -158,6 +170,7 @@
       opacity: 1;
       pointer-events: auto;
     }
+
     .button-bar button,
     .button-bar input,
     .download-btn {
@@ -175,6 +188,7 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     .button-bar input { width: 60px; text-align: center; }
+
     #overlay {
       position: fixed;
       top: 0;
@@ -187,6 +201,7 @@
       justify-content: center;
       z-index: 1000;
     }
+
     #fullscreen-container {
       position: relative;
       display: flex;
@@ -205,6 +220,7 @@
       max-width: 100%;
       max-height: 100%;
     }
+
     #exitFullscreenBtn {
       position: absolute;
       top: 10px;
@@ -218,45 +234,51 @@
       cursor: pointer;
       z-index: 10;
     }
+
     :focus { outline: 3px solid #4D90FE; outline-offset: 2px; }
-    @media(max-width:768px) {
+
+    /* ================================
+       Mobile-Optimierungen ≤768px
+       ================================ */
+    @media (max-width: 768px) {
+      /* Pfeile auf Touch-Devices immer anzeigen */
       .nav-button {
-        /* Pfeile auf Touch-Devices immer anzeigen */
         opacity: 1 !important;
       }
+      /* Page darf scrollen, damit nichts abgeschnitten wird */
       html, body {
-        /* erlauben zu scrollen, wenn Wrapper zu hoch */
         height: auto;
         overflow: auto;
         justify-content: flex-start;
       }
       .book-wrapper {
-        /* auf 95vw Breite und max. 50vh Höhe */
         width: 95vw;
-        max-height: 50vh;
+        /* Portrait: Bild nimmt max. 60% der Höhe ein */
+        max-height: 60vh;
         margin: 2vh 0;
       }
+      /* Waagerechte Button-Bar zentriert unten */
       .button-bar {
-        /* horizontale Leiste zentriert unten */
         position: fixed;
         bottom: env(safe-area-inset-bottom, 1rem);
         left: 50%;
         transform: translateX(-50%);
-        width: 90%;
-        max-width: 400px;
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        padding: 0.75rem 1rem;
+        width: 95vw;
+        max-width: none;
+        flex-wrap: nowrap;
+        justify-content: space-around;
+        padding: 0.5rem;
       }
+      /* Zeige Toggle-Button, falls gewünscht */
       .button-bar-toggle {
-        bottom: env(safe-area-inset-bottom, 1rem);
+        display: block;
       }
     }
-    @media(max-width:768px) and (orientation: landscape) {
+
+    /* Landscape auf Mobil: etwas mehr Höhe erlauben */
+    @media (max-width: 768px) and (orientation: landscape) {
       .book-wrapper {
-        /* im Querformat etwas mehr Höhe */
-        max-height: 70vh;
+        max-height: 80vh;
       }
     }
   </style>
