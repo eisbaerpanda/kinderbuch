@@ -211,7 +211,7 @@
 
   <div class="button-bar" id="buttonBar">
     <label for="pageInput">Seite:</label>
-    <input type="number" id="pageInput" min="0" max="23" value="0">
+    <input type="number" id="pageInput" min="1" max="24" value="1">
     <span>/ 23</span>
     <button id="fullscreenBtn">⛶ Vollbild</button>
     <button id="backBtn">⇦ Zurück zum Anfang</button>
@@ -222,7 +222,7 @@
     <div id="fullscreen-container">
       <button id="exitFullscreenBtn">✕</button>
       <div class="page">
-        <img id="imgAFS" class="active" src="images/00.jpg" alt="Seite 0">
+        <img id="imgAFS" class="active" src="images/1.jpg" alt="Seite 1">
         <img id="imgBFS" src="" alt="">
       </div>
       <button class="nav-button" id="prevBtnFS">❮</button>
@@ -238,7 +238,7 @@
       page = Math.max(0, Math.min(page, totalPages - 1));
       if (page === currentPage) return;
       currentPage = page;
-      const newSrc = `images/${String(currentPage).padStart(2, '0')}.jpg`;
+      const newSrc = `images/${String(currentPage).padStart(2, '1')}.jpg`;
 
       const tempImg = new Image();
       tempImg.src = newSrc;
