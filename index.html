@@ -33,16 +33,13 @@
       background: #fff;
       border-radius: 0.5rem;
       filter: drop-shadow(0 10px 20px var(--lift-shadow));
-      margin: auto;            /* immer zentriert */
+      margin: auto;
       overflow: visible;
       touch-action: pan-y;
-      z-index: 1;              /* unter der Bar */
+      z-index: 1;
     }
 
-    .page {
-      position: relative; width: 100%; height: 100%;
-      padding: 0.5%; box-sizing: border-box;
-    }
+    .page { position: relative; width: 100%; height: 100%; padding: 0.5%; box-sizing: border-box; }
     .page img {
       position: absolute; inset: 0;
       width: 100%; height: 100%;
@@ -53,72 +50,66 @@
     .page img.active { opacity: 1; pointer-events: auto; }
 
     #spinner {
-      position: absolute; top:50%; left:50%;
-      width:40px; height:40px; margin:-20px;
-      border:4px solid rgba(0,0,0,0.1);
-      border-top:4px solid var(--btn-hover);
-      border-radius:50%;
+      position: absolute; top: 50%; left: 50%;
+      width: 40px; height: 40px; margin: -20px;
+      border: 4px solid rgba(0,0,0,0.1);
+      border-top: 4px solid var(--btn-hover);
+      border-radius: 50%;
       animation: spin 1s linear infinite;
-      display:none; z-index:20;
+      display: none; z-index: 20;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     #errorMsg {
-      position:absolute; top:50%; left:50%;
-      transform:translate(-50%,-50%);
-      background:rgba(255,0,0,0.8); color:#fff;
-      padding:1rem; border-radius:0.5rem;
-      display:none; z-index:20;
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255,0,0,0.8); color: #fff;
+      padding: 1rem; border-radius: 0.5rem;
+      display: none; z-index: 20;
     }
 
     .nav-button {
-      position:absolute; top:50%;
-      transform:translateY(-50%);
-      background:var(--btn-bg); backdrop-filter:blur(4px);
-      color:white; border:none;
-      width:44px; height:44px;
-      display:flex; align-items:center; justify-content:center;
-      font-size:clamp(1rem,2.5vw,1.2rem);
-      cursor:pointer; border-radius:4px;
-      opacity:0; transition:opacity 0.2s;
-      z-index:1;
+      position: absolute; top: 50%;
+      transform: translateY(-50%);
+      background: var(--btn-bg); backdrop-filter: blur(4px);
+      color: white; border: none;
+      width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: clamp(1rem,2.5vw,1.2rem);
+      cursor: pointer; border-radius: 4px;
+      opacity: 0; transition: opacity 0.2s; z-index: 1;
     }
     .book-wrapper:hover .nav-button,
-    #fullscreen-container:hover .nav-button {
-      opacity:1;
-    }
-    .nav-button:hover { background:var(--btn-hover); }
-    #prevBtn, #prevBtnFS { left:0.5rem; }
-    #nextBtn, #nextBtnFS { right:0.5rem; }
+    #fullscreen-container:hover .nav-button { opacity: 1; }
+    .nav-button:hover { background: var(--btn-hover); }
+    #prevBtn, #prevBtnFS { left: 0.5rem; }
+    #nextBtn, #nextBtnFS { right: 0.5rem; }
 
     .button-bar-toggle {
       display: none;
-      position: fixed; bottom:0.5rem; right:0.5rem;
-      background:var(--btn-bg); color:#fff;
-      border:none; border-radius:4px;
-      padding:0.5rem; font-size:1.5rem;
-      z-index:103; /* ganz oben */
-      cursor:pointer;
+      position: fixed; bottom: 0.5rem; right: 0.5rem;
+      background: var(--btn-bg); color: #fff;
+      border: none; border-radius: 4px;
+      padding: 0.5rem; font-size: 1.5rem;
+      z-index: 103; cursor: pointer;
     }
-    .button-bar-toggle::before { content:"☰"; }
+    .button-bar-toggle::before { content: "☰"; }
 
     .button-bar {
-      position: fixed; bottom:1rem;
-      left:50%; transform:translateX(-50%);
-      display:flex; flex-wrap: wrap; align-items: center;
-      gap:0.5rem;
+      position: fixed; bottom: 1rem;
+      left: 50%; transform: translateX(-50%);
+      display: flex; flex-wrap: wrap; align-items: center;
+      gap: 0.5rem;
       background: var(--bar-bg);
       box-shadow: 0 5px 15px var(--lift-shadow);
       border-radius: 1rem; padding: 0.75rem 1rem;
       opacity: 0; pointer-events: none;
-      transition: opacity 0.3s;
-      z-index: 102; /* über Buch, unter Toggle */
+      transition: opacity 0.3s; z-index: 102;
     }
     .button-bar.active {
       opacity: 1; pointer-events: auto;
     }
 
-    /* alle Controls bleiben kompakt */
     .button-bar button,
     .button-bar input,
     .download-btn {
@@ -134,42 +125,39 @@
     .button-bar input { width: 60px; text-align: center; }
 
     #overlay {
-      position: fixed; top:0; left:0;
-      width:100vw; height:100vh;
-      background:rgba(0,0,0,0.85);
-      display:none;
-      align-items:center; justify-content:center;
-      z-index:1000;
+      position: fixed; top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      align-items: center; justify-content: center;
+      z-index: 1000;
     }
     #fullscreen-container {
-      position: relative; display:flex;
-      align-items:center; justify-content:center;
+      position: relative; display: flex;
+      align-items: center; justify-content: center;
       width: min(calc(1302px*1.4),95vw);
-      max-height:95vh; aspect-ratio:6404/4269;
-      background:#fff; border-radius:0.5rem;
-      box-shadow:0 0 60px rgba(0,0,0,0.4);
-      overflow:hidden; touch-action:pan-zoom;
+      max-height: 95vh; aspect-ratio: 6404/4269;
+      background: #fff; border-radius: 0.5rem;
+      box-shadow: 0 0 60px rgba(0,0,0,0.4);
+      overflow: hidden; touch-action: pan-zoom;
     }
     #fullscreen-container .page img {
-      max-width:100%; max-height:100%;
+      max-width: 100%; max-height: 100%;
     }
     #exitFullscreenBtn {
-      position:absolute; top:10px; right:10px;
-      background:var(--btn-bg); color:#fff;
-      border:none; padding:0.5rem;
-      font-size:clamp(0.9rem,2vw,1rem);
-      border-radius:4px; cursor:pointer;
-      z-index:10;
+      position: absolute; top: 10px; right: 10px;
+      background: var(--btn-bg); color: #fff;
+      border: none; padding: 0.5rem;
+      font-size: clamp(0.9rem,2vw,1rem);
+      border-radius: 4px; cursor: pointer; z-index: 10;
     }
 
-    /*---------------------------------------------------
-      Mobile-Grund für ≤768px
-    ---------------------------------------------------*/
+    /* Mobile Grund (≤768px) */
     @media (max-width: 768px) {
       /* Pfeile immer sichtbar */
-      .nav-button { opacity:1 !important; }
+      .nav-button { opacity: 1 !important; }
 
-      /* Toggle-Bar anzeigen */
+      /* Toggle-Button einblenden */
       .button-bar-toggle { display: block; }
 
       /* Buch zentrieren und skalieren */
@@ -179,47 +167,40 @@
         margin: auto;
       }
 
-      /* Bar schmal halten */
+      /* Bar auf volle Breite */
       .button-bar {
-        width: auto;
-        max-width: 90vw;
+        width: 100vw;
+        max-width: none;
         justify-content: center;
         padding: 0.5rem;
       }
     }
 
-    /*---------------------------------------------------
-      Portrait-Mobile: drei Zeilen via bar-row
-    ---------------------------------------------------*/
+    /* Portrait-Mobile: drei Zeilen */
     @media (max-width: 768px) and (orientation: portrait) {
-      /* Buch absolut in der Mitte */
       html, body {
         height: 100vh; overflow: hidden;
         justify-content: center; align-items: center;
       }
       .book-wrapper { margin: auto; }
-
-      /* Bar als Column */
       .button-bar {
         flex-direction: column;
         align-items: center;
       }
       .bar-row {
-        display: flex;
-        justify-content: center;
-        gap: 0.5rem;
+        display: flex; justify-content: center; gap: 0.5rem;
       }
     }
 
-    /*---------------------------------------------------
-      Landscape-Mobile: mehr Höhe
-    ---------------------------------------------------*/
+    /* Landscape-Mobile: mehr Höhe */
     @media (max-width: 768px) and (orientation: landscape) {
       html, body {
         height: auto; overflow: auto;
         justify-content: flex-start; align-items: center;
       }
-      .book-wrapper { max-height: 80vh; }
+      .book-wrapper {
+        max-height: 80vh;
+      }
     }
   </style>
 </head>
@@ -248,10 +229,8 @@
       <button id="shareBtn" aria-label="Link teilen">🔗 Teilen</button>
     </div>
     <div class="bar-row">
-      <button id="backBtn" aria-label="Zurück zum Anfang">⇦ Zurück zum Anfang</button>
-      <a href="ProjektC/das-kleine-chamaeleon.pdf" download class="download-btn" role="button">
-        📄 PDF herunterladen
-      </a>
+      <button id="backBtn" aria-label="Zum Anfang">⇦ Zum Anfang</button>
+      <a href="ProjektC/das-kleine-chamaeleon.pdf" download class="download-btn" role="button" aria-label="PDF">📄 PDF</a>
     </div>
   </div>
 
@@ -303,16 +282,16 @@
       tmp.onload = () => {
         const imgA  = document.getElementById('imgA'),
               imgB  = document.getElementById('imgB'),
-              imgAF = document.getElementById('imgAFS'),
-              imgBF = document.getElementById('imgBFS');
+              aFS   = document.getElementById('imgAFS'),
+              bFS   = document.getElementById('imgBFS');
         const [a, h]    = imgA.classList.contains('active')  ? [imgA, imgB]  : [imgB, imgA];
-        const [aFS, hFS] = imgAF.classList.contains('active') ? [imgAF, imgBF] : [imgBF, imgAF];
+        const [aFSm, hFS] = aFS.classList.contains('active') ? [aFS, bFS] : [bFS, aFS];
 
         h.src = newSrc;   h.alt = `Seite ${currentPage}`;
         a.classList.remove('active'); h.classList.add('active');
 
         hFS.src = newSrc; hFS.alt = `Seite ${currentPage}`;
-        aFS.classList.remove('active'); hFS.classList.add('active');
+        aFSm.classList.remove('active'); hFS.classList.add('active');
 
         document.getElementById('pageInput').value = currentPage;
         updateURL(); updateTitle(); hideSpinner();
