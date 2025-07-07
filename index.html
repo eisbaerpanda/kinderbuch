@@ -91,7 +91,9 @@
 
     /* Klickbarer Fortschrittsbalken */
     #progressContainer {
-      position: relative; z-index:150;
+      position: fixed; bottom: calc(0.5rem + 2rem + 0.5rem); /* über NavBar */
+      left: 50%; transform: translateX(-50%);
+      z-index:150;
       width: min(1302px,95vw); max-width:95vw;
       height:4px; background: var(--progress-bg);
       border-radius:2px; overflow:hidden;
@@ -103,22 +105,31 @@
     .button-bar-toggle { display:none; position:fixed; bottom:0.5rem; right:0.5rem; background: var(--btn-bg); color:#fff; border:none; border-radius:4px; padding:0.5rem; font-size:1.5rem; z-index:101; }
     .button-bar-toggle::before { content:"\2630"; }
     .button-bar {
-      position:fixed; bottom:1rem; left:50%; transform:translateX(-50%);
-      display:flex; flex-wrap:wrap; align-items:center; gap:0.5rem;
+      position:fixed; bottom:0.5rem; left:50%; transform:translateX(-50%);
+      display:flex; flex-wrap:wrap; align-items:center; gap:0.25rem;
       background: var(--bar-bg); box-shadow: 0 4px 12px var(--bar-shadow);
-      border-radius:1rem; padding:0.75rem 1rem;
+      border-radius:1rem; padding:0.5rem 0.75rem;
       opacity:0; pointer-events:none; transition:opacity 0.3s; z-index:100;
     }
     .button-bar.active { opacity:1; pointer-events:auto; }
     .button-bar button, .button-bar input, .download-btn {
-      height:2.5rem; background:#fff; border:1px solid #ccc;
-      border-radius:6px; padding:0 1rem;
-      font-size: clamp(0.9rem,2vw,1rem);
+      height:2rem; background:#fff; border:1px solid #ccc;
+      border-radius:6px; padding:0 0.75rem;
+      font-size: clamp(0.8rem,1.5vw,0.9rem);
       color: var(--text-color); cursor:pointer;
       box-shadow:0 2px 4px rgba(0,0,0,0.1);
     }
-    .button-bar button:hover, .download-btn:hover { background:#f4f4f4; }
-    .button-bar input { width:60px; text-align:center; }
+    .button-bar input { width:50px; text-align:center; }
+
+    @media (prefers-color-scheme: dark) {
+      .button-bar { background: rgba(0,0,0,0.8); }
+      .button-bar button, .button-bar input, .download-btn {
+        background: rgba(0,0,0,0.6);
+        color: #eee;
+        border: 1px solid rgba(255,255,255,0.3);
+      }
+      .button-bar input { background: rgba(0,0,0,0.6); color: #eee; }
+    }
 
     /* Fullscreen */
     #overlay { position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.85); display:none; align-items:center; justify-content:center; z-index:1000; }
@@ -179,102 +190,50 @@
 
     function showSpinner() { spinner.style.display='block'; }
     function hideSpinner() { spinner.style.display='none'; }
-    function showError(text) {
-      errorMsg.textContent = text;
-      errorMsg.style.display = 'block';
-      setTimeout(() => errorMsg.style.display='none', 3000);
-    }
-    function updateProgress() {
-      const pct = (currentPage/totalPages)*100;
-      const bar = document.getElementById('progressBar'); bar.style.width = pct + '%';
-      const container = document.getElementById('progressContainer');
-      container.setAttribute('aria-valuenow', currentPage);
-      container.setAttribute('aria-label', `Fortschritt Seite ${currentPage} von ${totalPages}`);
-    }
+    function showError(text) { errorMsg.textContent = text; errorMsg.style.display='block'; setTimeout(() => errorMsg.style.display='none', 3000); }
+    function updateProgress() { const pct=(currentPage/totalPages)*100; const bar=document.getElementById('progressBar'); bar.style.width=pct+'%'; const cont=document.getElementById('progressContainer'); cont.setAttribute('aria-valuenow',currentPage); cont.setAttribute('aria-label',`Fortschritt Seite ${currentPage} von ${totalPages}`); }
     function updateURL() { history.replaceState(null,'',`#page=${currentPage}`); }
-    function updateTitle() { document.title = `Seite ${currentPage}/${totalPages} – Das kleine Chamäleon`; }
+    function updateTitle(){ document.title=`Seite ${currentPage}/${totalPages} – Das kleine Chamäleon`; }
 
-    function goToPage(page) {
-      page = Math.max(1, Math.min(page, totalPages));
-      if (page===currentPage) return;
-      currentPage = page;
-      const newSrc = `ProjektC/images/${currentPage}.jpg`;
-      showSpinner(); errorMsg.style.display='none';
-      const tempImg = new Image(); tempImg.src = newSrc;
-      tempImg.onload = () => {
-        const imgA = document.getElementById('imgA');
-        const imgB = document.getElementById('imgB');
-        const imgAFS = document.getElementById('imgAFS');
-        const imgBFS = document.getElementById('imgBFS');
-        const [a,h] = imgA.classList.contains('active') ? [imgA,imgB] : [imgB,imgA];
-        const [aFS,hFS] = imgAFS.classList.contains('active') ? [imgAFS,imgBFS] : [imgBFS,imgAFS];
-        h.src = newSrc; h.alt = `Seite ${currentPage}`; h.classList.add('active'); a.classList.remove('active');
-        hFS.src = newSrc; hFS.alt = `Seite ${currentPage}`; hFS.classList.add('active'); aFS.classList.remove('active');
-        document.getElementById('pageInput').value = currentPage;
-        updateProgress(); updateURL(); updateTitle(); hideSpinner();
-        if(currentPage<totalPages) new Image().src=`ProjektC/images/${currentPage+1}.jpg`;
-        if(currentPage>1)         new Image().src=`ProjektC/images/${currentPage-1}.jpg`;
+    function goToPage(page){ page=Math.max(1,Math.min(page,totalPages)); if(page===currentPage) return; currentPage=page; const newSrc=`ProjektC/images/${currentPage}.jpg`; showSpinner(); errorMsg.style.display='none'; const tmp=new Image(); tmp.src=newSrc;
+      tmp.onload=()=>{
+        const imgA=document.getElementById('imgA'), imgB=document.getElementById('imgB'), imgAFS=document.getElementById('imgAFS'), imgBFS=document.getElementById('imgBFS');
+        const [a,h]=imgA.classList.contains('active')?[imgA,imgB]:[imgB,imgA];
+        const [aFS,hFS]=imgAFS.classList.contains('active')?[imgAFS,imgBFS]:[imgBFS,imgAFS];
+        h.src=newSrc; h.alt=`Seite ${currentPage}`; h.classList.add('active'); a.classList.remove('active');
+        hFS.src=newSrc; hFS.alt=`Seite ${currentPage}`; hFS.classList.add('active'); aFS.classList.remove('active');
+        document.getElementById('pageInput').value=currentPage; updateProgress(); updateURL(); updateTitle(); hideSpinner();
+        if(currentPage<totalPages)new Image().src=`ProjektC/images/${currentPage+1}.jpg`;
+        if(currentPage>1)new Image().src=`ProjektC/images/${currentPage-1}.jpg`;
       };
-      tempImg.onerror = () => { hideSpinner(); showError('Bild konnte nicht geladen werden.'); };
+      tmp.onerror=()=>{ hideSpinner(); showError('Bild konnte nicht geladen werden.'); };
     }
 
-    // Initialisierung & Deep-Link
-    window.addEventListener('load', () => {
-      const m = location.hash.match(/page=(\d+)/);
-      if(m) goToPage(parseInt(m[1],10)); else { updateProgress(); updateTitle(); }
-      if(window.innerWidth>768) document.getElementById('buttonBar').classList.add('active');
-    });
+    window.addEventListener('load',()=>{ const m=location.hash.match(/page=(\d+)/); if(m) goToPage(parseInt(m[1],10)); else { updateProgress(); updateTitle(); } if(window.innerWidth>768) document.getElementById('buttonBar').classList.add('active'); });
 
     // Klick auf Fortschrittsbalken
-    document.getElementById('progressContainer').addEventListener('click', e => {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const page = Math.ceil(x/rect.width*totalPages);
-      goToPage(page);
+    document.getElementById('progressContainer').addEventListener('click', e=>{
+      const r=e.currentTarget.getBoundingClientRect(); const x=e.clientX - r.left;
+      const p=Math.ceil(x/r.width*totalPages); goToPage(p);
     });
 
-    // Navigation
-    ['prevBtn','nextBtn','prevBtnFS','nextBtnFS'].forEach(id => {
-      const el = document.getElementById(id);
-      el.addEventListener('click', () => goToPage(currentPage + (id.includes('prev')?-1:1)));
-    });
-    document.getElementById('pageInput').addEventListener('input', e => {
-      const v = parseInt(e.target.value,10);
-      if(!isNaN(v)) goToPage(v);
-    });
+    ['prevBtn','nextBtn','prevBtnFS','nextBtnFS'].forEach(id=>{ document.getElementById(id).addEventListener('click',()=>goToPage(currentPage + (id.includes('prev')?-1:1))); });
+    document.getElementById('pageInput').addEventListener('input',e=>{ const v=parseInt(e.target.value,10); if(!isNaN(v)) goToPage(v); });
 
     // Fullscreen
-    const overlay = document.getElementById('overlay');
-    const exitBtn = document.getElementById('exitFullscreenBtn');
-    const fullscreenBtn = document.getElementById('fullscreenBtn');
-    const wrapper = document.getElementById('bookWrapper');
-    fullscreenBtn.addEventListener('click', () => { overlay.style.display='flex'; document.body.style.overflow='hidden'; exitBtn.focus(); });
-    exitBtn.addEventListener('click', () => { overlay.style.display='none'; document.body.style.overflow=''; wrapper.focus(); });
+    const overlay=document.getElementById('overlay'), exitBtn=document.getElementById('exitFullscreenBtn'), fullscreenBtn=document.getElementById('fullscreenBtn'), wrapper=document.getElementById('bookWrapper');
+    fullscreenBtn.addEventListener('click',()=>{ overlay.style.display='flex'; document.body.style.overflow='hidden'; exitBtn.focus(); });
+    exitBtn.addEventListener('click',()=>{ overlay.style.display='none'; document.body.style.overflow=''; wrapper.focus(); });
 
     // Keyboard
-    document.addEventListener('keydown', e => {
-      if(e.key === 'ArrowLeft') goToPage(currentPage-1);
-      if(e.key === 'ArrowRight') goToPage(currentPage+1);
-      if(e.key === 'Escape' && overlay.style.display==='flex') exitBtn.click();
-    });
+    document.addEventListener('keydown',e=>{ if(e.key==='ArrowLeft') goToPage(currentPage-1); if(e.key==='ArrowRight') goToPage(currentPage+1); if(e.key==='Escape' && overlay.style.display==='flex') exitBtn.click(); });
 
     // Touch gestures
-    [wrapper, document.getElementById('fullscreen-container')].forEach(c => {
-      let startX = 0;
-      c.addEventListener('touchstart', e => startX = e.changedTouches[0].screenX, {passive:true});
-      c.addEventListener('touchend', e => {
-        const endX = e.changedTouches[0].screenX;
-        if(endX < startX-50) goToPage(currentPage+1);
-        if(endX > startX+50) goToPage(currentPage-1);
-      }, {passive:true});
-    });
+    [wrapper,document.getElementById('fullscreen-container')].forEach(c=>{ let s=0; c.addEventListener('touchstart',e=>s=e.changedTouches[0].screenX,{passive:true}); c.addEventListener('touchend',e=>{ const ex=e.changedTouches[0].screenX; if(ex<s-50) goToPage(currentPage+1); if(ex> s+50) goToPage(currentPage-1); },{passive:true}); });
 
     // Button-Bar toggle & share
-    window.toggleButtonBar = () => document.getElementById('buttonBar').classList.toggle('active');
-    document.getElementById('shareBtn').addEventListener('click', () => {
-      const url = window.location.href;
-      navigator.clipboard.writeText(url).then(() => alert('Link kopiert!'));
-    });
+    window.toggleButtonBar=()=>document.getElementById('buttonBar').classList.toggle('active');
+    document.getElementById('shareBtn').addEventListener('click',()=>{ const url=window.location.href; navigator.clipboard.writeText(url).then(()=>alert('Link kopiert!')); });
   </script>
 </body>
 </html>
