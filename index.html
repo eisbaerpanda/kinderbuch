@@ -2,254 +2,219 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>Das kleine Chamäleon</title>
   <style>
-    /* Grundlegendes Reset und Layout */
+    /* Farbvariablen für Light/Dark */
+    :root {
+      --bg-start: #fef6e4;
+      --bg-end:   #d8e2dc;
+      --btn-bg:   rgba(0,0,0,0.5);
+      --btn-hover: rgba(0,0,0,0.8);
+      --bar-bg:   rgba(255,255,255,0.95);
+      --bar-shadow: rgba(0,0,0,0.1);
+      --progress-bg: rgba(0,0,0,0.1);
+      --progress-fill: #4D90FE;
+      --text-color: #222;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-start: #2b2b2b;
+        --bg-end:   #1a1a1a;
+        --btn-bg:   rgba(255,255,255,0.2);
+        --btn-hover: rgba(255,255,255,0.4);
+        --bar-bg:   rgba(0,0,0,0.6);
+        --bar-shadow: rgba(0,0,0,0.4);
+        --progress-bg: rgba(255,255,255,0.2);
+        --progress-fill: #1e90ff;
+        --text-color: #eee;
+      }
+    }
+
     html, body {
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
       height: 100vh;
       overflow: hidden;
-      background: linear-gradient(to bottom right, #fef6e4, #d8e2dc);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      background: linear-gradient(to bottom right, var(--bg-start), var(--bg-end));
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text-color);
     }
 
     /* Buch-Container */
     .book-wrapper {
       position: relative;
       width: min(1302px, 95vw);
-      max-height: 80vh; /* Begrenzt die Höhe auf großen Bildschirmen */
-      height: auto;
-      aspect-ratio: 6404 / 4269;
-      background-color: #ffffff;
-      border-radius: 0.5rem; /* Abgerundete Ecken */
-      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      max-height: 80vh;
+      aspect-ratio: 6404/4269;
+      background: #fff;
+      border-radius: 0.5rem;
+      box-shadow: 0 15px 45px rgba(0,0,0,0.3);
+      margin: 4vh 0;
       overflow: hidden;
-      margin: 4vh 0; /* Vertikaler flexibler Abstand */
       touch-action: pan-y;
     }
-
     .page {
       position: relative;
-      width: 100%;
-      height: 100%;
-      box-sizing: border-box; /* Padding mit einbeziehen */
-      padding: 0.5%; /* Kleiner Innenabstand für Puffer zur Illustration */
+      width: 100%; height: 100%;
+      padding: 0.5%; box-sizing: border-box;
     }
-
     .page img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      transition: opacity 0.4s ease-in-out;
-      opacity: 0;
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; object-fit: contain;
+      opacity: 0; transition: opacity 0.4s;
       pointer-events: none;
     }
     .page img.active {
-      opacity: 1;
-      pointer-events: auto;
+      opacity: 1; pointer-events: auto;
     }
 
-    /* Navigation-Pfeile */
+    /* Spinner */
+    #spinner {
+      position: absolute; top:50%; left:50%;
+      width: 40px; height:40px;
+      margin:-20px;
+      border: 4px solid rgba(0,0,0,0.1);
+      border-top: 4px solid var(--progress-fill);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: none; z-index:20;
+    }
+    @keyframes spin { to { transform: rotate(360deg);} }
+
+    /* Error Message */
+    #errorMsg {
+      position: absolute; top:50%; left:50%;
+      transform: translate(-50%,-50%);
+      background: rgba(255,0,0,0.8); color: #fff;
+      padding: 1rem; border-radius: 0.5rem;
+      display: none; z-index:20;
+    }
+
+    /* Navigation */
     .nav-button {
-      position: absolute;
-      top: 50%;
+      position: absolute; top:50%;
       transform: translateY(-50%);
-      background-color: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(4px); /* leichte Unschärfe fürs Motiv */
-      color: white;
-      border: none;
-      padding: 0.5rem;
-      min-width: 44px; /* Touch-Zielgröße */
-      min-height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: clamp(1rem, 2.5vw, 1.2rem);
-      line-height: 1;
-      cursor: pointer;
-      z-index: 10;
-      border-radius: 4px;
+      background: var(--btn-bg);
+      backdrop-filter: blur(4px);
+      color: white; border:none;
+      width:44px; height:44px;
+      display:flex; align-items:center; justify-content:center;
+      font-size: clamp(1rem,2.5vw,1.2rem);
+      cursor:pointer; border-radius:4px; z-index:10;
     }
-    .nav-button:hover {
-      background-color: rgba(0, 0, 0, 0.8);
-    }
-    #prevBtn, #prevBtnFS { left: 0; }
-    #nextBtn, #nextBtnFS { right: 0; }
+    .nav-button:hover { background: var(--btn-hover); }
+    #prevBtn, #prevBtnFS { left:0; }
+    #nextBtn, #nextBtnFS { right:0; }
 
-    /* Fortschrittsanzeige */
+    /* Progress Bar */
     #progressContainer {
-      width: min(1302px, 95vw);
-      max-width: 95vw;
-      height: 4px;
-      background: rgba(0,0,0,0.1);
-      border-radius: 2px;
-      margin-top: -4px; /* sitzt direkt unter dem Buch */
-      overflow: hidden;
+      width: min(1302px,95vw); max-width:95vw;
+      height:4px; background: var(--progress-bg);
+      border-radius:2px; overflow:hidden;
     }
     #progressBar {
-      height: 100%;
-      width: 0%;
-      background: #4D90FE;
-      transition: width 0.3s ease;
+      width:0%; height:100%; background: var(--progress-fill);
+      transition: width 0.3s;
     }
 
-    /* Button-Bar am unteren Rand */
+    /* Button-Bar */
     .button-bar-toggle {
-      display: none;
-      position: fixed;
-      bottom: 0.5rem;
-      right: 0.5rem;
-      background-color: rgba(0, 0, 0, 0.5);
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 0.5rem;
-      font-size: 1.5rem;
-      z-index: 101;
+      display:none; position:fixed;
+      bottom:0.5rem; right:0.5rem;
+      background: var(--btn-bg); color:#fff;
+      border:none; border-radius:4px;
+      padding:0.5rem; font-size:1.5rem;
+      z-index:101;
     }
-    .button-bar-toggle::before { content: "\2630"; }
-
+    .button-bar-toggle::before { content:"\2630"; }
     .button-bar {
-      position: fixed;
-      bottom: 1rem;
-      left: 50%;
-      transform: translateX(-50%);
-      width: max-content;
-      max-width: 95vw;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-      gap: 0.5rem;
-      background-color: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(8px);
-      border-radius: 1rem; /* größere Abrundung */
-      padding: 0.75rem 1rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* feiner Schatten */
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      z-index: 100;
+      position:fixed; bottom:1rem; left:50%;
+      transform:translateX(-50%);
+      display:flex; flex-wrap:wrap;
+      align-items:center; gap:0.5rem;
+      background: var(--bar-bg);
+      box-shadow: 0 4px 12px var(--bar-shadow);
+      border-radius:1rem;
+      padding:0.75rem 1rem;
+      opacity:0; pointer-events:none;
+      transition: opacity 0.3s;
+      z-index:100;
     }
-    .button-bar.active {
-      opacity: 1;
-      pointer-events: auto;
+    .button-bar.active { opacity:1; pointer-events:auto; }
+    .button-bar button, .button-bar input, .download-btn {
+      height:2.5rem; background:#fff;
+      border:1px solid #ccc; border-radius:6px;
+      padding:0 1rem;
+      font-size: clamp(0.9rem,2vw,1rem);
+      color: var(--text-color);
+      cursor:pointer; box-shadow:0 2px 4px rgba(0,0,0,0.1);
     }
+    .button-bar button:hover, .download-btn:hover { background:#f4f4f4; }
+    .button-bar input { width:60px; text-align:center; }
 
-    .button-bar button,
-    .button-bar input,
-    .download-btn {
-      height: 2.5rem; /* einheitliche Höhe */
-      line-height: 2.5rem;
-      background-color: #ffffff;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      padding: 0 1rem;
-      font-size: clamp(0.9rem, 2vw, 1rem);
-      color: #222;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-decoration: none;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    .button-bar button:hover,
-    .download-btn:hover { background-color: #f4f4f4; }
-    .button-bar input {
-      width: 60px;
-      text-align: center;
-    }
-
-    /* Fullscreen-Overlay */
+    /* Fullscreen */
     #overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: rgba(0, 0, 0, 0.85);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
+      position:fixed; top:0; left:0;
+      width:100vw; height:100vh;
+      background: rgba(0,0,0,0.85);
+      display:none; align-items:center; justify-content:center;
+      z-index:1000;
     }
-
     #fullscreen-container {
-      width: min(calc(1302px * 1.4), 95vw);
-      max-height: 95vh;
-      height: auto;
-      aspect-ratio: 6404 / 4269;
-      background-color: #ffffff;
-      border-radius: 0.5rem;
-      box-shadow: 0 0 60px rgba(0, 0, 0, 0.4);
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
+      width:min(calc(1302px*1.4),95vw);
+      max-height:95vh; aspect-ratio:6404/4269;
+      background:#fff; border-radius:0.5rem;
+      box-shadow:0 0 60px rgba(0,0,0,0.4);
+      overflow:auto; touch-action: pan-zoom;
+      position:relative; display:flex;
+      align-items:center; justify-content:center;
     }
-    #fullscreen-container .page img { max-width: 100%; max-height: 100%; }
-
+    #fullscreen-container .page img { max-width:100%; max-height:100%; }
     #exitFullscreenBtn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: rgba(0, 0, 0, 0.6);
-      color: white;
-      border: none;
-      padding: 0.5rem;
-      cursor: pointer;
-      font-size: clamp(0.9rem, 2vw, 1rem);
-      border-radius: 4px;
-      z-index: 10;
+      position:absolute; top:10px; right:10px;
+      background: var(--btn-bg); color:#fff;
+      border:none; padding:0.5rem;
+      font-size: clamp(0.9rem,2vw,1rem);
+      border-radius:4px; cursor:pointer; z-index:10;
     }
+    
+    /* Fokus-Ring */
+    :focus { outline:3px solid #4D90FE; outline-offset:2px; }
 
-    /* Deutlicher Fokus-Ring */
-    :focus {
-      outline: 3px solid #4D90FE;
-      outline-offset: 2px;
-    }
-
-    @media screen and (max-width: 768px) {
-      .nav-button { font-size: 1rem; padding: 0.3rem; }
-      .button-bar-toggle { display: block; }
+    @media(max-width:768px) {
+      .nav-button { font-size:1rem; padding:0.3rem; }
+      .button-bar-toggle { display:block; }
     }
   </style>
 </head>
 <body>
-  <div class="book-wrapper" id="bookWrapper">
+  <div class="book-wrapper" id="bookWrapper" tabindex="0">
+    <div id="spinner"></div>
+    <div id="errorMsg" role="alert"></div>
     <div class="page">
       <img id="imgA" class="active" src="ProjektC/images/1.jpg" alt="Seite 1">
-      <img id="imgB" src="" alt="">
+      <img id="imgB" src="" alt="">      
     </div>
     <button class="nav-button" id="prevBtn" aria-label="Vorherige Seite">❮</button>
     <button class="nav-button" id="nextBtn" aria-label="Nächste Seite">❯</button>
   </div>
-  <div id="progressContainer"><div id="progressBar"></div></div>
+  <div id="progressContainer" role="progressbar" aria-valuemin="1" aria-valuemax="24" aria-valuenow="1" aria-label="Fortschritt Seite 1 von 24"><div id="progressBar"></div></div>
 
   <button class="button-bar-toggle" onclick="toggleButtonBar()" aria-label="Optionen umschalten"></button>
-
   <div class="button-bar" id="buttonBar">
     <label for="pageInput">Seite:</label>
     <input type="number" id="pageInput" min="1" max="24" value="1">
     <span>/ 24</span>
-    <button id="fullscreenBtn">⛶ Vollbild</button>
-    <button id="backBtn">⇦ Zurück zum Anfang</button>
-    <a href="ProjektC/das-kleine-chamaeleon.pdf" download class="download-btn">📄 PDF herunterladen</a>
+    <button id="fullscreenBtn" aria-label="Vollbild starten">⛶ Vollbild</button>
+    <button id="shareBtn" aria-label="Link teilen">🔗 Teilen</button>
+    <button id="backBtn" aria-label="Zurück zum Anfang">⇦ Zurück zum Anfang</button>
+    <a href="ProjektC/das-kleine-chamaeleon.pdf" download class="download-btn" role="button">📄 PDF herunterladen</a>
   </div>
 
-  <div id="overlay">
-    <div id="fullscreen-container">
+  <div id="overlay" role="dialog" aria-modal="true">
+    <div id="fullscreen-container" role="document" aria-label="Vollbildansicht">
       <button id="exitFullscreenBtn" aria-label="Vollbild beenden">✕</button>
       <div class="page">
         <img id="imgAFS" class="active" src="ProjektC/images/1.jpg" alt="Seite 1">
@@ -264,99 +229,118 @@
     const totalPages = 24;
     let currentPage = 1;
 
+    // Spinner & Error
+    const spinner = document.getElementById('spinner');
+    const errorMsg = document.getElementById('errorMsg');
+
+    function showSpinner() { spinner.style.display='block'; }
+    function hideSpinner() { spinner.style.display='none'; }
+    function showError(text) {
+      errorMsg.textContent = text;
+      errorMsg.style.display = 'block';
+      setTimeout(() => errorMsg.style.display='none', 3000);
+    }
+
     function updateProgress() {
-      const pct = (currentPage / totalPages) * 100;
-      document.getElementById('progressBar').style.width = pct + '%';
+      const pct = (currentPage/totalPages)*100;
+      const bar = document.getElementById('progressBar');
+      bar.style.width = pct + '%';
+      const container = document.getElementById('progressContainer');
+      container.setAttribute('aria-valuenow', currentPage);
+      container.setAttribute('aria-label', `Fortschritt Seite ${currentPage} von ${totalPages}`);
+    }
+
+    function updateURL() {
+      history.replaceState(null,'',`#page=${currentPage}`);
+    }
+
+    function updateTitle() {
+      document.title = `Seite ${currentPage}/${totalPages} – Das kleine Chamäleon`;
     }
 
     function goToPage(page) {
       page = Math.max(1, Math.min(page, totalPages));
-      if (page === currentPage) return;
+      if (page===currentPage) return;
       currentPage = page;
       const newSrc = `ProjektC/images/${currentPage}.jpg`;
-
-      const tempImg = new Image();
-      tempImg.src = newSrc;
+      showSpinner(); errorMsg.style.display='none';
+      const tempImg = new Image(); tempImg.src = newSrc;
       tempImg.onload = () => {
-        const imgA = document.getElementById("imgA");
-        const imgB = document.getElementById("imgB");
-        const imgAFS = document.getElementById("imgAFS");
-        const imgBFS = document.getElementById("imgBFS");
-
-        const [active, hidden]   = imgA.classList.contains("active")   ? [imgA, imgB]   : [imgB, imgA];
-        const [activeFS, hiddenFS] = imgAFS.classList.contains("active") ? [imgAFS, imgBFS] : [imgBFS, imgAFS];
-
-        hidden.src = newSrc;
-        hidden.alt = `Seite ${currentPage}`;
-        hidden.classList.add("active");
-        active.classList.remove("active");
-
-        hiddenFS.src = newSrc;
-        hiddenFS.alt = `Seite ${currentPage}`;
-        hiddenFS.classList.add("active");
-        activeFS.classList.remove("active");
-
-        document.getElementById("pageInput").value = currentPage;
-        updateProgress();
-
+        const imgA = document.getElementById('imgA');
+        const imgB = document.getElementById('imgB');
+        const imgAFS = document.getElementById('imgAFS');
+        const imgBFS = document.getElementById('imgBFS');
+        const [active, hidden] = imgA.classList.contains('active') ? [imgA,imgB] : [imgB,imgA];
+        const [activeFS, hiddenFS] = imgAFS.classList.contains('active') ? [imgAFS,imgBFS] : [imgBFS,imgAFS];
+        hidden.src = newSrc; hidden.alt = `Seite ${currentPage}`;
+        hidden.classList.add('active'); active.classList.remove('active');
+        hiddenFS.src = newSrc; hiddenFS.alt = `Seite ${currentPage}`;
+        hiddenFS.classList.add('active'); activeFS.classList.remove('active');
+        document.getElementById('pageInput').value = currentPage;
+        updateProgress(); updateURL(); updateTitle();
+        hideSpinner();
         // Preload Nachbarseiten
-        if (currentPage < totalPages) new Image().src = `ProjektC/images/${currentPage+1}.jpg`;
-        if (currentPage > 1)         new Image().src = `ProjektC/images/${currentPage-1}.jpg`;
+        if(currentPage<totalPages) new Image().src=`ProjektC/images/${currentPage+1}.jpg`;
+        if(currentPage>1)         new Image().src=`ProjektC/images/${currentPage-1}.jpg`;
       };
-      tempImg.onerror = () => console.error(`Fehler beim Laden von ${newSrc}`);
+      tempImg.onerror = () => { hideSpinner(); showError('Bild konnte nicht geladen werden.'); };
     }
 
-    // Events
-    ['prevBtn','nextBtn','prevBtnFS','nextBtnFS'].forEach(id => {
-      const inc = id.toLowerCase().includes('prev') ? -1 : 1;
-      document.getElementById(id).addEventListener('click', () => goToPage(currentPage + inc));
+    // Deep-link initial
+    window.addEventListener('load', () => {
+      const m = location.hash.match(/page=(\d+)/);
+      if(m) goToPage(parseInt(m[1],10)); else updateTitle();
+      updateProgress();
+      if(window.innerWidth>768) document.getElementById('buttonBar').classList.add('active');
     });
 
-    document.getElementById("pageInput").addEventListener("input", e => {
-      const v = parseInt(e.target.value, 10);
-      if (!isNaN(v)) goToPage(v);
+    // Navigation
+    ['prevBtn','nextBtn','prevBtnFS','nextBtnFS'].forEach(id=>{
+      const el = document.getElementById(id);
+      el.addEventListener('click', ()=> goToPage(currentPage + (id.includes('prev')?-1:1)));
+    });
+    document.getElementById('pageInput').addEventListener('input', e=>{
+      const v = parseInt(e.target.value,10);
+      if(!isNaN(v)) goToPage(v);
     });
 
+    // Fullscreen
     const overlay = document.getElementById('overlay');
     const exitBtn = document.getElementById('exitFullscreenBtn');
     const fullscreenBtn = document.getElementById('fullscreenBtn');
     const wrapper = document.getElementById('bookWrapper');
-
-    fullscreenBtn.addEventListener('click', () => {
-      overlay.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
+    fullscreenBtn.addEventListener('click', ()=>{
+      overlay.style.display='flex'; document.body.style.overflow='hidden';
       exitBtn.focus();
     });
-    exitBtn.addEventListener('click', () => {
-      overlay.style.display = 'none';
-      document.body.style.overflow = '';
+    exitBtn.addEventListener('click', ()=>{
+      overlay.style.display='none'; document.body.style.overflow='';
       wrapper.focus();
     });
 
-    document.getElementById('backBtn').addEventListener('click', () => goToPage(1));
-
-    document.addEventListener('keydown', e => {
-      if (e.key==='ArrowLeft')  goToPage(currentPage-1);
-      if (e.key==='ArrowRight') goToPage(currentPage+1);
-      if (e.key==='Escape' && overlay.style.display==='flex') exitBtn.click();
+    // Keyboard
+    document.addEventListener('keydown',e=>{
+      if(e.key==='ArrowLeft') goToPage(currentPage-1);
+      if(e.key==='ArrowRight') goToPage(currentPage+1);
+      if(e.key==='Escape' && overlay.style.display==='flex') exitBtn.click();
     });
 
-    // Touch-Gesten
-    [wrapper, document.getElementById('fullscreen-container')].forEach(container => {
+    // Touch gestures
+    [wrapper, document.getElementById('fullscreen-container')].forEach(c=>{
       let startX=0;
-      container.addEventListener('touchstart', e => startX = e.changedTouches[0].screenX, {passive:true});
-      container.addEventListener('touchend', e => {
-        const endX = e.changedTouches[0].screenX;
-        if (endX < startX-50) goToPage(currentPage+1);
-        if (endX > startX+50) goToPage(currentPage-1);
-      }, {passive:true});
+      c.addEventListener('touchstart', e=>startX=e.changedTouches[0].screenX,{passive:true});
+      c.addEventListener('touchend', e=>{
+        const endX=e.changedTouches[0].screenX;
+        if(endX<startX-50) goToPage(currentPage+1);
+        if(endX>startX+50) goToPage(currentPage-1);
+      },{passive:true});
     });
 
-    // Button-Bar initial anzeigen
-    window.toggleButtonBar = () => document.getElementById('buttonBar').classList.toggle('active');
-    window.addEventListener('load', () => {
-      if (window.innerWidth>768) document.getElementById('buttonBar').classList.add('active');
-      updateProgress();
+    // Button-Bar toggle & share
+    window.toggleButtonBar = ()=> document.getElementById('buttonBar').classList.toggle('active');
+    document.getElementById('shareBtn').addEventListener('click', ()=>{
+      const url = window.location.href;
+      navigator.clipboard.writeText(url).then(()=> alert('Link kopiert!'));    
     });
   </script>
 </body>
