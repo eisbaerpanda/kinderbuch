@@ -200,7 +200,7 @@
 <body>
   <div class="book-wrapper" id="bookWrapper">
     <div class="page">
-      <img id="imgA" class="active" src="ProjektC/images/1.png" alt="Seite 1">
+      <img id="imgA" class="active" src="ProjektC/images/00.png" alt="Seite 0">
       <img id="imgB" src="" alt="">
     </div>
     <button class="nav-button" id="prevBtn">❮</button>
@@ -211,8 +211,8 @@
 
   <div class="button-bar" id="buttonBar">
     <label for="pageInput">Seite:</label>
-    <input type="number" id="pageInput" min="1" max="17" value="1">
-    <span>/ 17</span>
+    <input type="number" id="pageInput" min="0" max="23" value="0">
+    <span>/ 23</span>
     <button id="fullscreenBtn">⛶ Vollbild</button>
     <button id="backBtn">⇦ Zurück zum Anfang</button>
     <a href="ProjektC/das-kleine-chamaeleon.pdf" download class="download-btn">📄 PDF herunterladen</a>
@@ -222,7 +222,7 @@
     <div id="fullscreen-container">
       <button id="exitFullscreenBtn">✕</button>
       <div class="page">
-        <img id="imgAFS" class="active" src="ProjektC/images/1.png" alt="Seite 1">
+        <img id="imgAFS" class="active" src="ProjektC/images/00.png" alt="Seite 0">
         <img id="imgBFS" src="" alt="">
       </div>
       <button class="nav-button" id="prevBtnFS">❮</button>
@@ -231,14 +231,14 @@
   </div>
 
   <script>
-    const totalPages = 17;
-    let currentPage = 1;
+    const totalPages = 24;
+    let currentPage = 0;
 
     function goToPage(page) {
-      page = Math.max(1, Math.min(page, totalPages));
+      page = Math.max(0, Math.min(page, totalPages - 1));
       if (page === currentPage) return;
       currentPage = page;
-      const newSrc = `ProjektC/images/${currentPage}.png`;
+      const newSrc = `ProjektC/images/${String(currentPage).padStart(2, '0')}.png`;
 
       const tempImg = new Image();
       tempImg.src = newSrc;
@@ -279,7 +279,7 @@
       document.getElementById("overlay").style.display = "none";
     });
 
-    document.getElementById("backBtn").addEventListener("click", () => goToPage(1));
+    document.getElementById("backBtn").addEventListener("click", () => goToPage(0));
 
     document.addEventListener("keydown", (e) => {
       if (e.key === "ArrowLeft") goToPage(currentPage - 1);
