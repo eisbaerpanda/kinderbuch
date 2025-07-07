@@ -21,7 +21,7 @@
       background: linear-gradient(to bottom right, var(--bg-start), var(--bg-end));
       display: flex; flex-direction: column;
       justify-content: center; align-items: center;
-      font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       color: var(--text-color);
     }
 
@@ -33,10 +33,10 @@
       background: #fff;
       border-radius: 0.5rem;
       filter: drop-shadow(0 10px 20px var(--lift-shadow));
-      margin: auto;           /* zentriert immer */
+      margin: auto;            /* immer zentriert */
       overflow: visible;
       touch-action: pan-y;
-      z-index: 1;             /* Buch liegt unter der Bar */
+      z-index: 1;              /* unter der Bar */
     }
 
     .page {
@@ -53,134 +53,135 @@
     .page img.active { opacity: 1; pointer-events: auto; }
 
     #spinner {
-      position: absolute; top: 50%; left: 50%;
-      width: 40px; height: 40px; margin: -20px;
-      border: 4px solid rgba(0,0,0,0.1);
-      border-top: 4px solid var(--btn-hover);
-      border-radius: 50%;
+      position: absolute; top:50%; left:50%;
+      width:40px; height:40px; margin:-20px;
+      border:4px solid rgba(0,0,0,0.1);
+      border-top:4px solid var(--btn-hover);
+      border-radius:50%;
       animation: spin 1s linear infinite;
-      display: none; z-index: 20;
+      display:none; z-index:20;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     #errorMsg {
-      position: absolute; top:50%; left:50%;
-      transform: translate(-50%,-50%);
-      background: rgba(255,0,0,0.8); color: #fff;
-      padding: 1rem; border-radius: 0.5rem;
-      display: none; z-index: 20;
+      position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      background:rgba(255,0,0,0.8); color:#fff;
+      padding:1rem; border-radius:0.5rem;
+      display:none; z-index:20;
     }
 
     .nav-button {
-      position: absolute; top: 50%;
-      transform: translateY(-50%);
-      background: var(--btn-bg); backdrop-filter: blur(4px);
-      color: white; border: none;
-      width: 44px; height: 44px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: clamp(1rem,2.5vw,1.2rem);
-      cursor: pointer; border-radius: 4px;
-      opacity: 0; transition: opacity 0.2s;
-      z-index: 1;
+      position:absolute; top:50%;
+      transform:translateY(-50%);
+      background:var(--btn-bg); backdrop-filter:blur(4px);
+      color:white; border:none;
+      width:44px; height:44px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:clamp(1rem,2.5vw,1.2rem);
+      cursor:pointer; border-radius:4px;
+      opacity:0; transition:opacity 0.2s;
+      z-index:1;
     }
     .book-wrapper:hover .nav-button,
     #fullscreen-container:hover .nav-button {
-      opacity: 1;
+      opacity:1;
     }
-    .nav-button:hover { background: var(--btn-hover); }
-    #prevBtn, #prevBtnFS { left: 0.5rem; }
-    #nextBtn, #nextBtnFS { right: 0.5rem; }
+    .nav-button:hover { background:var(--btn-hover); }
+    #prevBtn, #prevBtnFS { left:0.5rem; }
+    #nextBtn, #nextBtnFS { right:0.5rem; }
 
     .button-bar-toggle {
       display: none;
-      position: fixed; bottom: 0.5rem; right: 0.5rem;
-      background: var(--btn-bg); color: #fff;
-      border: none; border-radius: 4px;
-      padding: 0.5rem; font-size: 1.5rem;
-      z-index: 103;  /* immer ganz oben */
-      cursor: pointer;
+      position: fixed; bottom:0.5rem; right:0.5rem;
+      background:var(--btn-bg); color:#fff;
+      border:none; border-radius:4px;
+      padding:0.5rem; font-size:1.5rem;
+      z-index:103; /* ganz oben */
+      cursor:pointer;
     }
-    .button-bar-toggle::before { content: "☰"; }
+    .button-bar-toggle::before { content:"☰"; }
 
     .button-bar {
-      position: fixed; bottom: 1rem;
-      left: 50%; transform: translateX(-50%);
-      display: flex; flex-wrap: wrap; align-items: center;
-      gap: 0.5rem;
+      position: fixed; bottom:1rem;
+      left:50%; transform:translateX(-50%);
+      display:flex; flex-wrap: wrap; align-items: center;
+      gap:0.5rem;
       background: var(--bar-bg);
       box-shadow: 0 5px 15px var(--lift-shadow);
       border-radius: 1rem; padding: 0.75rem 1rem;
       opacity: 0; pointer-events: none;
       transition: opacity 0.3s;
-      z-index: 102;  /* über Buch, aber unter Toggle */
+      z-index: 102; /* über Buch, unter Toggle */
     }
     .button-bar.active {
       opacity: 1; pointer-events: auto;
     }
+
+    /* alle Controls bleiben kompakt */
     .button-bar button,
     .button-bar input,
     .download-btn {
-      display: inline-flex;
-      align-items: center; justify-content: center;
+      display: inline-flex; align-items: center; justify-content: center;
       height: 2.5rem;
       background: #fff; border: 1px solid #ccc;
       border-radius: 6px; padding: 0 1rem;
       font-size: clamp(0.9rem,2vw,1rem);
       color: var(--text-color); cursor: pointer;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      flex: 0 0 auto;  /* kompaktes Maß */
+      flex: 0 0 auto;
     }
     .button-bar input { width: 60px; text-align: center; }
 
     #overlay {
-      position: fixed; top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: rgba(0,0,0,0.85);
-      display: none;
-      align-items: center; justify-content: center;
-      z-index: 1000;
+      position: fixed; top:0; left:0;
+      width:100vw; height:100vh;
+      background:rgba(0,0,0,0.85);
+      display:none;
+      align-items:center; justify-content:center;
+      z-index:1000;
     }
     #fullscreen-container {
-      position: relative; display: flex;
-      align-items: center; justify-content: center;
+      position: relative; display:flex;
+      align-items:center; justify-content:center;
       width: min(calc(1302px*1.4),95vw);
-      max-height: 95vh; aspect-ratio: 6404/4269;
-      background: #fff; border-radius: 0.5rem;
-      box-shadow: 0 0 60px rgba(0,0,0,0.4);
-      overflow: hidden; touch-action: pan-zoom;
+      max-height:95vh; aspect-ratio:6404/4269;
+      background:#fff; border-radius:0.5rem;
+      box-shadow:0 0 60px rgba(0,0,0,0.4);
+      overflow:hidden; touch-action:pan-zoom;
     }
     #fullscreen-container .page img {
-      max-width: 100%; max-height: 100%;
+      max-width:100%; max-height:100%;
     }
     #exitFullscreenBtn {
-      position: absolute; top: 10px; right: 10px;
-      background: var(--btn-bg); color: #fff;
-      border: none; padding: 0.5rem;
-      font-size: clamp(0.9rem,2vw,1rem);
-      border-radius: 4px; cursor: pointer;
-      z-index: 10;
+      position:absolute; top:10px; right:10px;
+      background:var(--btn-bg); color:#fff;
+      border:none; padding:0.5rem;
+      font-size:clamp(0.9rem,2vw,1rem);
+      border-radius:4px; cursor:pointer;
+      z-index:10;
     }
 
     /*---------------------------------------------------
-      Mobile ≤768px Basiseinstellungen
+      Mobile-Grund für ≤768px
     ---------------------------------------------------*/
     @media (max-width: 768px) {
-      /* immer sichtbare Pfeile */
-      .nav-button { opacity: 1 !important; }
+      /* Pfeile immer sichtbar */
+      .nav-button { opacity:1 !important; }
 
-      /* Toggle-Button zeigen */
+      /* Toggle-Bar anzeigen */
       .button-bar-toggle { display: block; }
 
-      /* Buch skalieren, aber in Portrait zentriert */
+      /* Buch zentrieren und skalieren */
       .book-wrapper {
         width: 95vw;
         max-height: 60vh;
         margin: auto;
       }
 
-      /* kompakte, waagerechte Bar */
+      /* Bar schmal halten */
       .button-bar {
-        width: auto;      /* nur so breit wie nötig */
+        width: auto;
         max-width: 90vw;
         justify-content: center;
         padding: 0.5rem;
@@ -188,38 +189,37 @@
     }
 
     /*---------------------------------------------------
-      Portrait-Modus: Buch & Bar zentriert
+      Portrait-Mobile: drei Zeilen via bar-row
     ---------------------------------------------------*/
     @media (max-width: 768px) and (orientation: portrait) {
+      /* Buch absolut in der Mitte */
       html, body {
         height: 100vh; overflow: hidden;
         justify-content: center; align-items: center;
       }
-      .book-wrapper {
-        margin: auto;
-      }
+      .book-wrapper { margin: auto; }
+
+      /* Bar als Column */
       .button-bar {
-        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: center;
       }
-      /* alle Buttons/Controls gleich breit, zwei nebeneinander */
-      .button-bar > * {
-        flex: 1 1 48%;
-        max-width: 48%;
-        margin: 0.25rem;
+      .bar-row {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
       }
     }
 
     /*---------------------------------------------------
-      Landscape-Modus: mehr vertikale Freiheit
+      Landscape-Mobile: mehr Höhe
     ---------------------------------------------------*/
     @media (max-width: 768px) and (orientation: landscape) {
       html, body {
         height: auto; overflow: auto;
         justify-content: flex-start; align-items: center;
       }
-      .book-wrapper {
-        max-height: 80vh;
-      }
+      .book-wrapper { max-height: 80vh; }
     }
   </style>
 </head>
@@ -238,15 +238,21 @@
 
   <button class="button-bar-toggle" onclick="toggleButtonBar()" aria-label="Optionen umschalten"></button>
   <div class="button-bar" id="buttonBar">
-    <label for="pageInput">Seite:</label>
-    <input type="number" id="pageInput" min="1" max="24" value="1">
-    <span>/ 24</span>
-    <button id="fullscreenBtn" aria-label="Vollbild starten">⛶ Vollbild</button>
-    <button id="shareBtn" aria-label="Link teilen">🔗 Teilen</button>
-    <button id="backBtn" aria-label="Zurück zum Anfang">⇦ Zurück zum Anfang</button>
-    <a href="ProjektC/das-kleine-chamaeleon.pdf" download class="download-btn" role="button">
-      📄 PDF herunterladen
-    </a>
+    <div class="bar-row">
+      <label for="pageInput">Seite:</label>
+      <input type="number" id="pageInput" min="1" max="24" value="1">
+      <span>/ 24</span>
+    </div>
+    <div class="bar-row">
+      <button id="fullscreenBtn" aria-label="Vollbild starten">⛶ Vollbild</button>
+      <button id="shareBtn" aria-label="Link teilen">🔗 Teilen</button>
+    </div>
+    <div class="bar-row">
+      <button id="backBtn" aria-label="Zurück zum Anfang">⇦ Zurück zum Anfang</button>
+      <a href="ProjektC/das-kleine-chamaeleon.pdf" download class="download-btn" role="button">
+        📄 PDF herunterladen
+      </a>
+    </div>
   </div>
 
   <div id="overlay" role="dialog" aria-modal="true">
@@ -266,10 +272,10 @@
     let currentPage = 1;
     const spinner      = document.getElementById('spinner'),
           errorMsg     = document.getElementById('errorMsg'),
-          wrapper       = document.getElementById('bookWrapper'),
-          fsContainer   = document.getElementById('fullscreen-container'),
-          buttonBar     = document.getElementById('buttonBar'),
-          toggleBtn     = document.querySelector('.button-bar-toggle');
+          wrapper      = document.getElementById('bookWrapper'),
+          fsContainer  = document.getElementById('fullscreen-container'),
+          buttonBar    = document.getElementById('buttonBar'),
+          toggleBtn    = document.querySelector('.button-bar-toggle');
 
     function showSpinner() { spinner.style.display = 'block'; }
     function hideSpinner() { spinner.style.display = 'none'; }
@@ -299,10 +305,10 @@
               imgB  = document.getElementById('imgB'),
               imgAF = document.getElementById('imgAFS'),
               imgBF = document.getElementById('imgBFS');
-        const [a, h]   = imgA.classList.contains('active')  ? [imgA, imgB]  : [imgB, imgA];
+        const [a, h]    = imgA.classList.contains('active')  ? [imgA, imgB]  : [imgB, imgA];
         const [aFS, hFS] = imgAF.classList.contains('active') ? [imgAF, imgBF] : [imgBF, imgAF];
 
-        h.src = newSrc; h.alt = `Seite ${currentPage}`;
+        h.src = newSrc;   h.alt = `Seite ${currentPage}`;
         a.classList.remove('active'); h.classList.add('active');
 
         hFS.src = newSrc; hFS.alt = `Seite ${currentPage}`;
@@ -311,7 +317,6 @@
         document.getElementById('pageInput').value = currentPage;
         updateURL(); updateTitle(); hideSpinner();
 
-        // Preload
         if (currentPage < totalPages) new Image().src = `ProjektC/images/${currentPage+1}.jpg`;
         if (currentPage > 1)          new Image().src = `ProjektC/images/${currentPage-1}.jpg`;
       };
@@ -321,30 +326,25 @@
       };
     }
 
-    // Laden / initialisieren
     window.addEventListener('load', () => {
       const m = location.hash.match(/page=(\d+)/);
       if (m) goToPage(parseInt(m[1],10));
       else updateTitle();
-      // Desktop: Bar gleich anzeigen
       if (window.innerWidth > 768) buttonBar.classList.add('active');
     });
 
-    // Prev/Next Buttons
     ['prevBtn','nextBtn','prevBtnFS','nextBtnFS'].forEach(id => {
       document.getElementById(id).addEventListener('click', () =>
         goToPage(currentPage + (id.includes('prev') ? -1 : 1))
       );
     });
 
-    // Input & Back
     document.getElementById('pageInput').addEventListener('input', e => {
       const v = parseInt(e.target.value,10);
       if (!isNaN(v)) goToPage(v);
     });
     document.getElementById('backBtn').addEventListener('click', () => goToPage(1));
 
-    // Click-Zones
     wrapper.addEventListener('click', e => {
       if (e.target.closest('.nav-button')) return;
       const r = wrapper.getBoundingClientRect(), x = e.clientX - r.left;
@@ -358,7 +358,6 @@
       else if (x > r.width*0.8) goToPage(currentPage+1);
     });
 
-    // Fullscreen
     const overlay       = document.getElementById('overlay'),
           exitBtn       = document.getElementById('exitFullscreenBtn'),
           fullscreenBtn = document.getElementById('fullscreenBtn');
@@ -374,37 +373,30 @@
       wrapper.focus();
     });
 
-    // Keyboard
     document.addEventListener('keydown', e => {
       if (e.key === 'ArrowLeft')  goToPage(currentPage-1);
       if (e.key === 'ArrowRight') goToPage(currentPage+1);
       if (e.key === 'Escape' && overlay.style.display==='flex') exitBtn.click();
     });
 
-    // Touch-Swipes
     [wrapper, fsContainer].forEach(el => {
       let startX = 0;
       el.addEventListener('touchstart', e => startX = e.changedTouches[0].screenX, { passive: true });
       el.addEventListener('touchend',   e => {
         const endX = e.changedTouches[0].screenX;
-        if (endX < startX - 50) goToPage(currentPage+1);
-        if (endX > startX + 50) goToPage(currentPage-1);
+        if (endX < startX-50) goToPage(currentPage+1);
+        if (endX > startX+50) goToPage(currentPage-1);
       }, { passive: true });
     });
 
-    // Toggle-Menu
     function toggleButtonBar() {
       buttonBar.classList.toggle('active');
-      // wenn zugeklappt, Buch wieder fokussieren
       if (!buttonBar.classList.contains('active')) wrapper.focus();
     }
-    // Expose global
     window.toggleButtonBar = toggleButtonBar;
 
-    // Share
     document.getElementById('shareBtn').addEventListener('click', () => {
-      navigator.clipboard.writeText(window.location.href)
-        .then(() => alert('Link kopiert!'));
+      navigator.clipboard.writeText(window.location.href).then(() => alert('Link kopiert!'));
     });
   </script>
 </body>
