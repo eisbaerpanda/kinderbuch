@@ -114,7 +114,7 @@
     }
     .nav-button:hover { background: var(--btn-hover); }
 
-    /* Hier die Positionierung um 0.5rem eingerückt */
+    /* Pfeile einrücken, damit sie nicht an der Kante verschwinden */
     #prevBtn, #prevBtnFS {
       left: 0.5rem;
     }
@@ -219,9 +219,48 @@
       z-index: 10;
     }
     :focus { outline: 3px solid #4D90FE; outline-offset: 2px; }
-    @media(max-width:768px) {
-      .nav-button { font-size:1rem; padding:0.3rem; }
-      .button-bar-toggle { display:block; }
+
+    /* ================================
+       Mobile-Optimierungen ≤768px
+       ================================ */
+    @media (max-width: 768px) {
+      /* Pfeile immer sichtbar auf Touch */
+      .nav-button {
+        opacity: 1 !important;
+      }
+      /* Seite scrollbar erlauben */
+      html, body {
+        height: auto;
+        overflow: auto;
+        justify-content: flex-start;
+      }
+      /* Wrapper anpassen, damit nichts abgeschnitten wird */
+      .book-wrapper {
+        width: 95vw;
+        max-height: 50vh;
+        margin: 2vh 0;
+      }
+      /* Button-Bar vertikal und zentriert */
+      .button-bar {
+        position: absolute;
+        bottom: env(safe-area-inset-bottom, 1rem);
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 400px;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 1rem;
+      }
+      .button-bar-toggle {
+        bottom: env(safe-area-inset-bottom, 1rem);
+      }
+    }
+    /* Im Landscape etwas mehr Höhe für das Buch */
+    @media (max-width: 768px) and (orientation: landscape) {
+      .book-wrapper {
+        max-height: 70vh;
+      }
     }
   </style>
 </head>
