@@ -22,7 +22,7 @@
       position: relative;
       width: min(1302px, 95vw);
       height: auto;
-      aspect-ratio: 1302 / 920;
+      aspect-ratio: 6404 / 4269;
       background-color: #ffffff;
       box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
       display: flex;
@@ -156,7 +156,7 @@
     #fullscreen-container {
       width: min(calc(1302px * 1.4), 95vw);
       height: auto;
-      aspect-ratio: 1302 / 920;
+      aspect-ratio: 6404 / 4269;
       background-color: #ffffff;
       box-shadow: 0 0 60px rgba(0, 0, 0, 0.4);
       position: relative;
@@ -200,7 +200,7 @@
 <body>
   <div class="book-wrapper" id="bookWrapper">
     <div class="page">
-      <img id="imgA" class="active" src="images/00.jpg" alt="Seite 0">
+      <img id="imgA" class="active" src="ProjektC/images/1.jpg" alt="Seite 1">
       <img id="imgB" src="" alt="">
     </div>
     <button class="nav-button" id="prevBtn">❮</button>
@@ -212,17 +212,17 @@
   <div class="button-bar" id="buttonBar">
     <label for="pageInput">Seite:</label>
     <input type="number" id="pageInput" min="1" max="24" value="1">
-    <span>/ 23</span>
+    <span>/ 24</span>
     <button id="fullscreenBtn">⛶ Vollbild</button>
     <button id="backBtn">⇦ Zurück zum Anfang</button>
-    <a href="das-kleine-chamaeleon.pdf" download class="download-btn">📄 PDF herunterladen</a>
+    <a href="ProjektC/das-kleine-chamaeleon.pdf" download class="download-btn">📄 PDF herunterladen</a>
   </div>
 
   <div id="overlay">
     <div id="fullscreen-container">
       <button id="exitFullscreenBtn">✕</button>
       <div class="page">
-        <img id="imgAFS" class="active" src="images/1.jpg" alt="Seite 1">
+        <img id="imgAFS" class="active" src="ProjektC/images/1.jpg" alt="Seite 1">
         <img id="imgBFS" src="" alt="">
       </div>
       <button class="nav-button" id="prevBtnFS">❮</button>
@@ -232,13 +232,13 @@
 
   <script>
     const totalPages = 24;
-    let currentPage = 0;
+    let currentPage = 1;
 
     function goToPage(page) {
-      page = Math.max(0, Math.min(page, totalPages - 1));
+      page = Math.max(1, Math.min(page, totalPages));
       if (page === currentPage) return;
       currentPage = page;
-      const newSrc = `images/${String(currentPage).padStart(2, '1')}.jpg`;
+      const newSrc = `ProjektC/images/${currentPage}.jpg`;
 
       const tempImg = new Image();
       tempImg.src = newSrc;
@@ -279,7 +279,7 @@
       document.getElementById("overlay").style.display = "none";
     });
 
-    document.getElementById("backBtn").addEventListener("click", () => goToPage(0));
+    document.getElementById("backBtn").addEventListener("click", () => goToPage(1));
 
     document.addEventListener("keydown", (e) => {
       if (e.key === "ArrowLeft") goToPage(currentPage - 1);
