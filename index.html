@@ -19,11 +19,9 @@
       margin: 0; padding: 0;
       height: 100vh; overflow: hidden;
       background: linear-gradient(to bottom right, var(--bg-start), var(--bg-end));
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
       color: var(--text-color);
     }
 
@@ -35,9 +33,10 @@
       background: #fff;
       border-radius: 0.5rem;
       filter: drop-shadow(0 10px 20px var(--lift-shadow));
-      margin: 4vh 0;
+      margin: auto;           /* zentriert immer */
       overflow: visible;
       touch-action: pan-y;
+      z-index: 1;             /* Buch liegt unter der Bar */
     }
 
     .page {
@@ -54,157 +53,155 @@
     .page img.active { opacity: 1; pointer-events: auto; }
 
     #spinner {
-      position: absolute; top:50%; left:50%;
-      width:40px; height:40px; margin:-20px;
-      border:4px solid rgba(0,0,0,0.1);
-      border-top:4px solid var(--btn-hover);
-      border-radius:50%;
+      position: absolute; top: 50%; left: 50%;
+      width: 40px; height: 40px; margin: -20px;
+      border: 4px solid rgba(0,0,0,0.1);
+      border-top: 4px solid var(--btn-hover);
+      border-radius: 50%;
       animation: spin 1s linear infinite;
-      display:none; z-index:20;
+      display: none; z-index: 20;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     #errorMsg {
-      position:absolute; top:50%; left:50%;
-      transform:translate(-50%,-50%);
-      background:rgba(255,0,0,0.8); color:#fff;
-      padding:1rem; border-radius:0.5rem;
-      display:none; z-index:20;
+      position: absolute; top:50%; left:50%;
+      transform: translate(-50%,-50%);
+      background: rgba(255,0,0,0.8); color: #fff;
+      padding: 1rem; border-radius: 0.5rem;
+      display: none; z-index: 20;
     }
 
     .nav-button {
-      position:absolute; top:50%;
-      transform:translateY(-50%);
-      background:var(--btn-bg); backdrop-filter:blur(4px);
-      color:white; border:none;
-      width:44px; height:44px;
-      display:flex; align-items:center; justify-content:center;
-      font-size:clamp(1rem,2.5vw,1.2rem);
-      cursor:pointer; border-radius:4px;
-      opacity:0; transition:opacity 0.2s;
-      z-index:1000;
+      position: absolute; top: 50%;
+      transform: translateY(-50%);
+      background: var(--btn-bg); backdrop-filter: blur(4px);
+      color: white; border: none;
+      width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: clamp(1rem,2.5vw,1.2rem);
+      cursor: pointer; border-radius: 4px;
+      opacity: 0; transition: opacity 0.2s;
+      z-index: 1;
     }
     .book-wrapper:hover .nav-button,
     #fullscreen-container:hover .nav-button {
-      opacity:1;
+      opacity: 1;
     }
-    .nav-button:hover { background:var(--btn-hover); }
-    #prevBtn, #prevBtnFS { left:0.5rem; }
-    #nextBtn, #nextBtnFS { right:0.5rem; }
+    .nav-button:hover { background: var(--btn-hover); }
+    #prevBtn, #prevBtnFS { left: 0.5rem; }
+    #nextBtn, #nextBtnFS { right: 0.5rem; }
 
     .button-bar-toggle {
-      display:none;
-      position:fixed; bottom:0.5rem; right:0.5rem;
-      background:var(--btn-bg); color:#fff;
-      border:none; border-radius:4px;
-      padding:0.5rem; font-size:1.5rem;
-      z-index:101;
+      display: none;
+      position: fixed; bottom: 0.5rem; right: 0.5rem;
+      background: var(--btn-bg); color: #fff;
+      border: none; border-radius: 4px;
+      padding: 0.5rem; font-size: 1.5rem;
+      z-index: 103;  /* immer ganz oben */
+      cursor: pointer;
     }
-    .button-bar-toggle::before { content:"☰"; }
+    .button-bar-toggle::before { content: "☰"; }
 
     .button-bar {
-      position:fixed; bottom:1rem;
-      left:50%; transform:translateX(-50%);
-      display:flex; flex-wrap:wrap; align-items:center;
-      gap:0.5rem;
-      background:var(--bar-bg);
-      box-shadow:0 5px 15px var(--lift-shadow);
-      border-radius:1rem; padding:0.75rem 1rem;
-      opacity:0; pointer-events:none;
-      transition:opacity 0.3s;
-      z-index:100;
+      position: fixed; bottom: 1rem;
+      left: 50%; transform: translateX(-50%);
+      display: flex; flex-wrap: wrap; align-items: center;
+      gap: 0.5rem;
+      background: var(--bar-bg);
+      box-shadow: 0 5px 15px var(--lift-shadow);
+      border-radius: 1rem; padding: 0.75rem 1rem;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+      z-index: 102;  /* über Buch, aber unter Toggle */
     }
     .button-bar.active {
-      opacity:1; pointer-events:auto;
-      z-index:102; /* ganz vorne, wenn aktiv */
+      opacity: 1; pointer-events: auto;
     }
     .button-bar button,
     .button-bar input,
     .download-btn {
-      display:inline-flex; align-items:center; justify-content:center;
-      height:2.5rem;
-      background:#fff; border:1px solid #ccc;
-      border-radius:6px; padding:0 1rem;
-      font-size:clamp(0.9rem,2vw,1rem);
-      color:var(--text-color); cursor:pointer;
-      box-shadow:0 2px 4px rgba(0,0,0,0.1);
+      display: inline-flex;
+      align-items: center; justify-content: center;
+      height: 2.5rem;
+      background: #fff; border: 1px solid #ccc;
+      border-radius: 6px; padding: 0 1rem;
+      font-size: clamp(0.9rem,2vw,1rem);
+      color: var(--text-color); cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      flex: 0 0 auto;  /* kompaktes Maß */
     }
-    .button-bar input { width:60px; text-align:center; }
+    .button-bar input { width: 60px; text-align: center; }
 
     #overlay {
-      position:fixed; top:0; left:0;
-      width:100vw; height:100vh;
-      background:rgba(0,0,0,0.85);
-      display:none;
-      align-items:center; justify-content:center;
-      z-index:1000;
+      position: fixed; top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      align-items: center; justify-content: center;
+      z-index: 1000;
     }
     #fullscreen-container {
-      position:relative; display:flex;
-      align-items:center; justify-content:center;
-      width:min(calc(1302px*1.4),95vw);
-      max-height:95vh; aspect-ratio:6404/4269;
-      background:#fff; border-radius:0.5rem;
-      box-shadow:0 0 60px rgba(0,0,0,0.4);
-      overflow:hidden; touch-action:pan-zoom;
+      position: relative; display: flex;
+      align-items: center; justify-content: center;
+      width: min(calc(1302px*1.4),95vw);
+      max-height: 95vh; aspect-ratio: 6404/4269;
+      background: #fff; border-radius: 0.5rem;
+      box-shadow: 0 0 60px rgba(0,0,0,0.4);
+      overflow: hidden; touch-action: pan-zoom;
     }
     #fullscreen-container .page img {
-      max-width:100%; max-height:100%;
+      max-width: 100%; max-height: 100%;
     }
     #exitFullscreenBtn {
-      position:absolute; top:10px; right:10px;
-      background:var(--btn-bg); color:#fff;
-      border:none; padding:0.5rem;
-      font-size:clamp(0.9rem,2vw,1rem);
-      border-radius:4px; cursor:pointer;
-      z-index:10;
+      position: absolute; top: 10px; right: 10px;
+      background: var(--btn-bg); color: #fff;
+      border: none; padding: 0.5rem;
+      font-size: clamp(0.9rem,2vw,1rem);
+      border-radius: 4px; cursor: pointer;
+      z-index: 10;
     }
 
     /*---------------------------------------------------
-      Mobile-Optimierungen für ≤768px Breite
+      Mobile ≤768px Basiseinstellungen
     ---------------------------------------------------*/
     @media (max-width: 768px) {
-      /* Pfeile auf Touch immer anzeigen */
-      .nav-button { opacity:1 !important; }
+      /* immer sichtbare Pfeile */
+      .nav-button { opacity: 1 !important; }
 
-      /* Scrollen erlauben, damit nichts abgeschnitten wird */
-      html, body {
-        height: auto; overflow: auto;
-        justify-content: flex-start;
-      }
-      /* Buch zentrieren und skalieren */
+      /* Toggle-Button zeigen */
+      .button-bar-toggle { display: block; }
+
+      /* Buch skalieren, aber in Portrait zentriert */
       .book-wrapper {
-        width:95vw;
-        max-height:60vh;
+        width: 95vw;
+        max-height: 60vh;
         margin: auto;
       }
-      /* Button-Bar: waagerecht, volle Breite unten */
+
+      /* kompakte, waagerechte Bar */
       .button-bar {
-        position: fixed;
-        bottom: env(safe-area-inset-bottom,1rem);
-        left: 50%;
-        transform: translateX(-50%);
-        width: 95vw;
-        flex-wrap: nowrap;
-        justify-content: space-between;
+        width: auto;      /* nur so breit wie nötig */
+        max-width: 90vw;
+        justify-content: center;
         padding: 0.5rem;
       }
-      .button-bar-toggle { display:block; }
     }
 
-    /* Portrait-spezifisch: zentrieren + gleiche Breite */
+    /*---------------------------------------------------
+      Portrait-Modus: Buch & Bar zentriert
+    ---------------------------------------------------*/
     @media (max-width: 768px) and (orientation: portrait) {
       html, body {
-        justify-content: center; /* wieder vertikal zentrieren */
+        height: 100vh; overflow: hidden;
+        justify-content: center; align-items: center;
       }
       .book-wrapper {
-        margin: 2vh auto; /* vertikal und horizontal zentriert */
+        margin: auto;
       }
       .button-bar {
-        flex-wrap: wrap; 
-        justify-content: center;
+        flex-wrap: wrap;
       }
-      /* Alle Kindelemente bekommen 48% Breite */
+      /* alle Buttons/Controls gleich breit, zwei nebeneinander */
       .button-bar > * {
         flex: 1 1 48%;
         max-width: 48%;
@@ -212,13 +209,22 @@
       }
     }
 
-    /* Landscape auf Mobil: mehr Höhe */
+    /*---------------------------------------------------
+      Landscape-Modus: mehr vertikale Freiheit
+    ---------------------------------------------------*/
     @media (max-width: 768px) and (orientation: landscape) {
-      .book-wrapper { max-height:80vh; }
+      html, body {
+        height: auto; overflow: auto;
+        justify-content: flex-start; align-items: center;
+      }
+      .book-wrapper {
+        max-height: 80vh;
+      }
     }
   </style>
 </head>
 <body>
+
   <div class="book-wrapper" id="bookWrapper" tabindex="0">
     <div id="spinner"></div>
     <div id="errorMsg" role="alert"></div>
@@ -258,10 +264,12 @@
   <script>
     const totalPages = 24;
     let currentPage = 1;
-    const spinner = document.getElementById('spinner'),
-          errorMsg = document.getElementById('errorMsg'),
-          wrapper = document.getElementById('bookWrapper'),
-          fsContainer = document.getElementById('fullscreen-container');
+    const spinner      = document.getElementById('spinner'),
+          errorMsg     = document.getElementById('errorMsg'),
+          wrapper       = document.getElementById('bookWrapper'),
+          fsContainer   = document.getElementById('fullscreen-container'),
+          buttonBar     = document.getElementById('buttonBar'),
+          toggleBtn     = document.querySelector('.button-bar-toggle');
 
     function showSpinner() { spinner.style.display = 'block'; }
     function hideSpinner() { spinner.style.display = 'none'; }
@@ -284,7 +292,8 @@
       const newSrc = `ProjektC/images/${currentPage}.jpg`;
       showSpinner(); errorMsg.style.display = 'none';
 
-      const tmp = new Image(); tmp.src = newSrc;
+      const tmp = new Image();
+      tmp.src = newSrc;
       tmp.onload = () => {
         const imgA  = document.getElementById('imgA'),
               imgB  = document.getElementById('imgB'),
@@ -293,57 +302,67 @@
         const [a, h]   = imgA.classList.contains('active')  ? [imgA, imgB]  : [imgB, imgA];
         const [aFS, hFS] = imgAF.classList.contains('active') ? [imgAF, imgBF] : [imgBF, imgAF];
 
-        h.src = newSrc;
-        h.alt = `Seite ${currentPage}`;
+        h.src = newSrc; h.alt = `Seite ${currentPage}`;
         a.classList.remove('active'); h.classList.add('active');
 
-        hFS.src = newSrc;
-        hFS.alt = `Seite ${currentPage}`;
+        hFS.src = newSrc; hFS.alt = `Seite ${currentPage}`;
         aFS.classList.remove('active'); hFS.classList.add('active');
 
         document.getElementById('pageInput').value = currentPage;
         updateURL(); updateTitle(); hideSpinner();
 
-        if (currentPage < totalPages) new Image().src = `ProjektC/images/${currentPage + 1}.jpg`;
-        if (currentPage > 1)          new Image().src = `ProjektC/images/${currentPage - 1}.jpg`;
+        // Preload
+        if (currentPage < totalPages) new Image().src = `ProjektC/images/${currentPage+1}.jpg`;
+        if (currentPage > 1)          new Image().src = `ProjektC/images/${currentPage-1}.jpg`;
       };
-      tmp.onerror = () => { hideSpinner(); showError('Bild konnte nicht geladen werden.'); };
+      tmp.onerror = () => {
+        hideSpinner();
+        showError('Bild konnte nicht geladen werden.');
+      };
     }
 
+    // Laden / initialisieren
     window.addEventListener('load', () => {
       const m = location.hash.match(/page=(\d+)/);
-      if (m) goToPage(parseInt(m[1], 10)); else updateTitle();
-      if (window.innerWidth > 768) document.getElementById('buttonBar').classList.add('active');
+      if (m) goToPage(parseInt(m[1],10));
+      else updateTitle();
+      // Desktop: Bar gleich anzeigen
+      if (window.innerWidth > 768) buttonBar.classList.add('active');
     });
 
+    // Prev/Next Buttons
     ['prevBtn','nextBtn','prevBtnFS','nextBtnFS'].forEach(id => {
       document.getElementById(id).addEventListener('click', () =>
         goToPage(currentPage + (id.includes('prev') ? -1 : 1))
       );
     });
+
+    // Input & Back
     document.getElementById('pageInput').addEventListener('input', e => {
-      const v = parseInt(e.target.value, 10);
+      const v = parseInt(e.target.value,10);
       if (!isNaN(v)) goToPage(v);
     });
     document.getElementById('backBtn').addEventListener('click', () => goToPage(1));
 
-    // Click zones: 20% left/right
+    // Click-Zones
     wrapper.addEventListener('click', e => {
       if (e.target.closest('.nav-button')) return;
       const r = wrapper.getBoundingClientRect(), x = e.clientX - r.left;
-      if (x < r.width * 0.2) goToPage(currentPage - 1);
-      else if (x > r.width * 0.8) goToPage(currentPage + 1);
+      if (x < r.width*0.2) goToPage(currentPage-1);
+      else if (x > r.width*0.8) goToPage(currentPage+1);
     });
     fsContainer.addEventListener('click', e => {
       if (e.target.closest('.nav-button')) return;
       const r = fsContainer.getBoundingClientRect(), x = e.clientX - r.left;
-      if (x < r.width * 0.2) goToPage(currentPage - 1);
-      else if (x > r.width * 0.8) goToPage(currentPage + 1);
+      if (x < r.width*0.2) goToPage(currentPage-1);
+      else if (x > r.width*0.8) goToPage(currentPage+1);
     });
 
+    // Fullscreen
     const overlay       = document.getElementById('overlay'),
           exitBtn       = document.getElementById('exitFullscreenBtn'),
           fullscreenBtn = document.getElementById('fullscreenBtn');
+
     fullscreenBtn.addEventListener('click', () => {
       overlay.style.display = 'flex';
       document.body.style.overflow = 'hidden';
@@ -351,28 +370,41 @@
     });
     exitBtn.addEventListener('click', () => {
       overlay.style.display = 'none';
-      document.body.style.overflow = ''; wrapper.focus();
+      document.body.style.overflow = '';
+      wrapper.focus();
     });
 
+    // Keyboard
     document.addEventListener('keydown', e => {
-      if (e.key === 'ArrowLeft')  goToPage(currentPage - 1);
-      if (e.key === 'ArrowRight') goToPage(currentPage + 1);
-      if (e.key === 'Escape' && overlay.style.display === 'flex') exitBtn.click();
+      if (e.key === 'ArrowLeft')  goToPage(currentPage-1);
+      if (e.key === 'ArrowRight') goToPage(currentPage+1);
+      if (e.key === 'Escape' && overlay.style.display==='flex') exitBtn.click();
     });
 
-    [wrapper, fsContainer].forEach(c => {
+    // Touch-Swipes
+    [wrapper, fsContainer].forEach(el => {
       let startX = 0;
-      c.addEventListener('touchstart', e => startX = e.changedTouches[0].screenX, { passive: true });
-      c.addEventListener('touchend', e => {
+      el.addEventListener('touchstart', e => startX = e.changedTouches[0].screenX, { passive: true });
+      el.addEventListener('touchend',   e => {
         const endX = e.changedTouches[0].screenX;
-        if (endX < startX - 50) goToPage(currentPage + 1);
-        if (endX > startX + 50) goToPage(currentPage - 1);
+        if (endX < startX - 50) goToPage(currentPage+1);
+        if (endX > startX + 50) goToPage(currentPage-1);
       }, { passive: true });
     });
 
-    window.toggleButtonBar = () => document.getElementById('buttonBar').classList.toggle('active');
+    // Toggle-Menu
+    function toggleButtonBar() {
+      buttonBar.classList.toggle('active');
+      // wenn zugeklappt, Buch wieder fokussieren
+      if (!buttonBar.classList.contains('active')) wrapper.focus();
+    }
+    // Expose global
+    window.toggleButtonBar = toggleButtonBar;
+
+    // Share
     document.getElementById('shareBtn').addEventListener('click', () => {
-      navigator.clipboard.writeText(window.location.href).then(() => alert('Link kopiert!'));
+      navigator.clipboard.writeText(window.location.href)
+        .then(() => alert('Link kopiert!'));
     });
   </script>
 </body>
