@@ -13,24 +13,20 @@
       --btn-hover: rgba(0,0,0,0.8);
       --bar-bg:   rgba(255,255,255,0.95);
       --bar-shadow: rgba(0,0,0,0.1);
+      --lift-shadow: rgba(0,0,0,0.15);
       --text-color: #222;
     }
 
     html, body {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      overflow: hidden;
+      margin: 0; padding: 0;
+      height: 100vh; overflow: hidden;
       background: linear-gradient(to bottom right, var(--bg-start), var(--bg-end));
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       color: var(--text-color);
     }
 
-    /* Buch-Container */
+    /* Buch-Container mit subtiler Hebung */
     .book-wrapper {
       position: relative;
       width: min(1302px, 95vw);
@@ -38,200 +34,111 @@
       aspect-ratio: 6404/4269;
       background: #fff;
       border-radius: 0.5rem;
-      box-shadow: 0 15px 45px rgba(0,0,0,0.3);
+      /* sanfter Drop-Shadow für Hoch- & Tiefenwirkung */
+      filter: drop-shadow(0 10px 20px var(--lift-shadow));
       margin: 4vh 0;
       overflow: hidden;
       touch-action: pan-y;
     }
     .page {
       position: relative;
-      width: 100%;
-      height: 100%;
-      padding: 0.5%;
-      box-sizing: border-box;
+      width: 100%; height: 100%;
+      padding: 0.5%; box-sizing: border-box;
     }
     .page img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      opacity: 0;
-      transition: opacity 0.4s;
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; object-fit: contain;
+      opacity: 0; transition: opacity 0.4s;
       pointer-events: none;
     }
     .page img.active {
-      opacity: 1;
-      pointer-events: auto;
+      opacity: 1; pointer-events: auto;
     }
 
     /* Spinner & Fehler */
     #spinner {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 40px;
-      height: 40px;
-      margin: -20px;
-      border: 4px solid rgba(0,0,0,0.1);
-      border-top: 4px solid var(--btn-hover);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      display: none;
-      z-index: 20;
+      position: absolute; top:50%; left:50%; width:40px; height:40px; margin:-20px;
+      border:4px solid rgba(0,0,0,0.1);
+      border-top:4px solid var(--btn-hover);
+      border-radius:50%; animation:spin 1s linear infinite;
+      display:none; z-index:20;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
     #errorMsg {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(255,0,0,0.8);
-      color: #fff;
-      padding: 1rem;
-      border-radius: 0.5rem;
-      display: none;
-      z-index: 20;
+      position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);
+      background:rgba(255,0,0,0.8); color:#fff; padding:1rem; border-radius:0.5rem;
+      display:none; z-index:20;
     }
 
     /* Navigation-Pfeile (nur auf Hover) */
     .nav-button {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: var(--btn-bg);
-      backdrop-filter: blur(4px);
-      color: white;
-      border: none;
-      width: 44px;
-      height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: clamp(1rem, 2.5vw, 1.2rem);
-      cursor: pointer;
-      border-radius: 4px;
-      opacity: 0;
-      transition: opacity 0.2s;
-      z-index: 10;
+      position: absolute; top:50%; transform:translateY(-50%);
+      background: var(--btn-bg); backdrop-filter:blur(4px);
+      color:white; border:none;
+      width:44px; height:44px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:clamp(1rem,2.5vw,1.2rem);
+      cursor:pointer; border-radius:4px;
+      opacity:0; transition:opacity 0.2s;
+      z-index:10;
     }
-    .book-wrapper:hover .nav-button {
-      opacity: 1;
-    }
-    #prevBtn, #prevBtnFS { left: 0; }
-    #nextBtn, #nextBtnFS { right: 0; }
+    .book-wrapper:hover .nav-button { opacity:1; }
+    .nav-button:hover { background: var(--btn-hover); }
+    #prevBtn, #prevBtnFS { left:0; }
+    #nextBtn, #nextBtnFS { right:0; }
 
-    /* Button-Bar */
-    .button-bar-toggle {
-      display: none;
-      position: fixed;
-      bottom: 0.5rem;
-      right: 0.5rem;
-      background: var(--btn-bg);
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      padding: 0.5rem;
-      font-size: 1.5rem;
-      z-index: 101;
-    }
-    .button-bar-toggle::before { content: "\2630"; }
+    /* Button-Bar mit Hebung */
     .button-bar {
-      position: fixed;
-      bottom: 1rem;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.5rem;
+      position: fixed; bottom:1rem; left:50%; transform:translateX(-50%);
+      display:flex; flex-wrap:wrap; align-items:center; gap:0.5rem;
       background: var(--bar-bg);
-      box-shadow: 0 4px 12px var(--bar-shadow);
-      border-radius: 1rem;
-      padding: 0.75rem 1rem;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s;
-      z-index: 100;
+      border-radius:1rem; padding:0.75rem 1rem;
+      opacity:0; pointer-events:none; transition:opacity 0.3s;
+      /* subtiler Schatten für Schweben-Effekt */
+      filter: drop-shadow(0 5px 15px var(--lift-shadow));
+      z-index:100;
     }
-    .button-bar.active {
-      opacity: 1;
-      pointer-events: auto;
+    .button-bar.active { opacity:1; pointer-events:auto; }
+    .button-bar-toggle {
+      display:none; position:fixed; bottom:0.5rem; right:0.5rem;
+      background: var(--btn-bg); color:#fff; border:none; border-radius:4px;
+      padding:0.5rem; font-size:1.5rem; z-index:101;
     }
+    .button-bar-toggle::before { content:"\2630"; }
     .button-bar button,
     .button-bar input,
     .download-btn {
-      height: 2.5rem;
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      padding: 0 1rem;
-      font-size: clamp(0.9rem, 2vw, 1rem);
-      color: var(--text-color);
-      cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+      height:2.5rem; background:#fff; border:1px solid #ccc;
+      border-radius:6px; padding:0 1rem;
+      font-size:clamp(0.9rem,2vw,1rem);
+      color:var(--text-color); cursor:pointer;
+      display:inline-flex; align-items:center; justify-content:center;
     }
-    .button-bar input {
-      width: 60px;
-      text-align: center;
-    }
+    .button-bar input { width:60px; text-align:center; }
 
     /* Fullscreen */
     #overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0,0,0,0.85);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
+      position:fixed; top:0; left:0; width:100vw; height:100vh;
+      background:rgba(0,0,0,0.85); display:none;
+      align-items:center; justify-content:center; z-index:1000;
     }
     #fullscreen-container {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: min(calc(1302px*1.4), 95vw);
-      max-height: 95vh;
-      aspect-ratio: 6404/4269;
-      background: #fff;
-      border-radius: 0.5rem;
-      box-shadow: 0 0 60px rgba(0,0,0,0.4);
-      overflow: auto;
-      touch-action: pan-zoom;
+      position:relative; display:flex; align-items:center; justify-content:center;
+      width:min(calc(1302px*1.4),95vw); max-height:95vh; aspect-ratio:6404/4269;
+      background:#fff; border-radius:0.5rem;
+      box-shadow:0 0 60px rgba(0,0,0,0.4);
+      overflow:auto; touch-action:pan-zoom;
     }
-    #fullscreen-container .page img {
-      max-width: 100%;
-      max-height: 100%;
-    }
+    #fullscreen-container .page img { max-width:100%; max-height:100%; }
     #exitFullscreenBtn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: var(--btn-bg);
-      color: #fff;
-      border: none;
-      padding: 0.5rem;
-      font-size: clamp(0.9rem, 2vw, 1rem);
-      border-radius: 4px;
-      cursor: pointer;
-      z-index: 10;
+      position:absolute; top:10px; right:10px;
+      background: var(--btn-bg); color:#fff; border:none;
+      padding:0.5rem; font-size:clamp(0.9rem,2vw,1rem);
+      border-radius:4px; cursor:pointer; z-index:10;
     }
 
-    :focus {
-      outline: 3px solid #4D90FE;
-      outline-offset: 2px;
-    }
-    @media(max-width:768px) {
-      .nav-button { font-size: 1rem; padding: 0.3rem; }
-      .button-bar-toggle { display: block; }
-    }
+    :focus { outline:3px solid #4D90FE; outline-offset:2px; }
+    @media(max-width:768px) { .nav-button { font-size:1rem; padding:0.3rem; } .button-bar-toggle { display:block; } }
   </style>
 </head>
 <body>
@@ -242,30 +149,30 @@
       <img id="imgA" class="active" src="ProjektC/images/1.jpg" alt="Seite 1">
       <img id="imgB" src="" alt="">
     </div>
-    <button class="nav-button" id="prevBtn" aria-label="Vorherige Seite" title="Vorherige Seite">❮</button>
-    <button class="nav-button" id="nextBtn" aria-label="Nächste Seite" title="Nächste Seite">❯</button>
+    <button class="nav-button" id="prevBtn" aria-label="Vorherige Seite">❮</button>
+    <button class="nav-button" id="nextBtn" aria-label="Nächste Seite">❯</button>
   </div>
 
-  <button class="button-bar-toggle" onclick="toggleButtonBar()" aria-label="Optionen umschalten" title="Optionen umschalten"></button>
+  <button class="button-bar-toggle" onclick="toggleButtonBar()" aria-label="Optionen umschalten"></button>
   <div class="button-bar" id="buttonBar">
     <label for="pageInput">Seite:</label>
     <input type="number" id="pageInput" min="1" max="24" value="1">
     <span>/ 24</span>
-    <button id="fullscreenBtn" aria-label="Vollbild starten" title="Vollbild starten">⛶ Vollbild</button>
-    <button id="shareBtn" aria-label="Link teilen" title="Link teilen">🔗 Teilen</button>
-    <button id="backBtn" aria-label="Zurück zum Anfang" title="Zurück zum Anfang">⇦ Zurück zum Anfang</button>
-    <a href="ProjektC/das-kleine-chamaeleon.pdf" download class="download-btn" role="button" title="PDF herunterladen">📄 PDF herunterladen</a>
+    <button id="fullscreenBtn" aria-label="Vollbild starten">⛶ Vollbild</button>
+    <button id="shareBtn" aria-label="Link teilen">🔗 Teilen</button>
+    <button id="backBtn" aria-label="Zurück zum Anfang">⇦ Zurück zum Anfang</button>
+    <a href="ProjektC/das-kleine-chamaeleon.pdf" download class="download-btn" role="button">📄 PDF herunterladen</a>
   </div>
 
   <div id="overlay" role="dialog" aria-modal="true">
     <div id="fullscreen-container" role="document" aria-label="Vollbildansicht">
-      <button id="exitFullscreenBtn" aria-label="Vollbild beenden" title="Vollbild beenden">✕</button>
+      <button id="exitFullscreenBtn" aria-label="Vollbild beenden">✕</button>
       <div class="page">
         <img id="imgAFS" class="active" src="ProjektC/images/1.jpg" alt="Seite 1">
         <img id="imgBFS" src="" alt="">
       </div>
-      <button class="nav-button" id="prevBtnFS" aria-label="Vorherige Seite" title="Vorherige Seite">❮</button>
-      <button class="nav-button" id="nextBtnFS" aria-label="Nächste Seite" title="Nächste Seite">❯</button>
+      <button class="nav-button" id="prevBtnFS" aria-label="Vorherige Seite">❮</button>
+      <button class="nav-button" id="nextBtnFS" aria-label="Nächste Seite">❯</button>
     </div>
   </div>
 
@@ -277,11 +184,7 @@
 
     function showSpinner() { spinner.style.display = 'block'; }
     function hideSpinner() { spinner.style.display = 'none'; }
-    function showError(text) {
-      errorMsg.textContent = text;
-      errorMsg.style.display = 'block';
-      setTimeout(() => errorMsg.style.display = 'none', 3000);
-    }
+    function showError(text) { errorMsg.textContent = text; errorMsg.style.display = 'block'; setTimeout(() => errorMsg.style.display = 'none', 3000); }
     function updateURL() { history.replaceState(null, '', `#page=${currentPage}`); }
     function updateTitle() { document.title = `Seite ${currentPage}/${totalPages} – Das kleine Chamäleon`; }
 
@@ -301,59 +204,54 @@
         const [a, h]   = imgA.classList.contains('active')   ? [imgA, imgB]   : [imgB, imgA];
         const [aFS, hFS] = imgAFS.classList.contains('active') ? [imgAFS, imgBFS] : [imgBFS, imgAFS];
 
-        h.src = newSrc;
-        h.alt = `Seite ${currentPage}`;
-        h.classList.add('active');
-        a.classList.remove('active');
-
-        hFS.src = newSrc;
-        hFS.alt = `Seite ${currentPage}`;
-        hFS.classList.add('active');
-        aFS.classList.remove('active');
+        h.src = newSrc; a.classList.remove('active'); h.classList.add('active'); h.alt = `Seite ${currentPage}`;
+        hFS.src = newSrc; aFS.classList.remove('active'); hFS.classList.add('active'); hFS.alt = `Seite ${currentPage}`;
 
         document.getElementById('pageInput').value = currentPage;
         updateURL(); updateTitle(); hideSpinner();
 
+        // Preload
         if (currentPage < totalPages) new Image().src = `ProjektC/images/${currentPage + 1}.jpg`;
         if (currentPage > 1) new Image().src = `ProjektC/images/${currentPage - 1}.jpg`;
       };
       tmp.onerror = () => { hideSpinner(); showError('Bild konnte nicht geladen werden.'); };
     }
 
+    // Init & deep-link
     window.addEventListener('load', () => {
       const m = location.hash.match(/page=(\d+)/);
-      if (m) goToPage(parseInt(m[1], 10));
-      else updateTitle();
+      if (m) goToPage(parseInt(m[1], 10)); else updateTitle();
       if (window.innerWidth > 768) document.getElementById('buttonBar').classList.add('active');
     });
 
+    // Navigation
     ['prevBtn','nextBtn','prevBtnFS','nextBtnFS'].forEach(id => {
-      document.getElementById(id).addEventListener('click', () =>
-        goToPage(currentPage + (id.includes('prev') ? -1 : 1))
-      );
+      document.getElementById(id).addEventListener('click', () => goToPage(currentPage + (id.includes('prev') ? -1 : 1)));
     });
     document.getElementById('pageInput').addEventListener('input', e => {
       const v = parseInt(e.target.value, 10);
       if (!isNaN(v)) goToPage(v);
     });
 
+    // Back to start
+    document.getElementById('backBtn').addEventListener('click', () => goToPage(1));
+
+    // Fullscreen
     const overlay = document.getElementById('overlay');
     const exitBtn = document.getElementById('exitFullscreenBtn');
     const fullscreenBtn = document.getElementById('fullscreenBtn');
     const wrapper = document.getElementById('bookWrapper');
-    fullscreenBtn.addEventListener('click', () => {
-      overlay.style.display = 'flex'; document.body.style.overflow = 'hidden'; exitBtn.focus();
-    });
-    exitBtn.addEventListener('click', () => {
-      overlay.style.display = 'none'; document.body.style.overflow = ''; wrapper.focus();
-    });
+    fullscreenBtn.addEventListener('click', () => { overlay.style.display = 'flex'; document.body.style.overflow = 'hidden'; exitBtn.focus(); });
+    exitBtn.addEventListener('click', () => { overlay.style.display = 'none'; document.body.style.overflow = ''; wrapper.focus(); });
 
+    // Keyboard
     document.addEventListener('keydown', e => {
       if (e.key === 'ArrowLeft') goToPage(currentPage - 1);
       if (e.key === 'ArrowRight') goToPage(currentPage + 1);
       if (e.key === 'Escape' && overlay.style.display === 'flex') exitBtn.click();
     });
 
+    // Touch gestures
     [wrapper, document.getElementById('fullscreen-container')].forEach(c => {
       let startX = 0;
       c.addEventListener('touchstart', e => startX = e.changedTouches[0].screenX, { passive: true });
@@ -364,10 +262,10 @@
       }, { passive: true });
     });
 
+    // Toggle & share
     window.toggleButtonBar = () => document.getElementById('buttonBar').classList.toggle('active');
     document.getElementById('shareBtn').addEventListener('click', () => {
-      navigator.clipboard.writeText(window.location.href).then(() => alert('Link kopiert!'));
-    });
+      navigator.clipboard.writeText(window.location.href).then(() => alert('Link kopiert!'));    });
   </script>
 </body>
 </html>
